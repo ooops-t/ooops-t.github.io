@@ -114,8 +114,7 @@ $ sudo gpg -a -o public.key --export xxxxx # xxxxx表示gpg生成的公钥
 ``` shell
 $ sudo sh -c 'echo "deb http://{服务器ip}/ubuntu/ test main" > /etc/apt/sources.list.d/test.list'
 ```
-- 添加公钥
-需要在服务器上将生成的``public.key`存放到`/var/www/html/key`目录下
+- 添加公钥, 需要在服务器上将生成的`public.key`存放到`/var/www/html/key`目录下(可选)
 ``` shell
 $ wget -qO - http://{服务器ip}/key/public.key | sudo apt-key add -
 ```
