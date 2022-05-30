@@ -1,3 +1,5 @@
+[TOC]
+
 # APT源服务搭建
 
 ## 0，环境
@@ -131,6 +133,6 @@ $ sudo apt install <pkg-name>
 
 # 参考文档
 
-* [creating-and-hosting-your-own-deb-packages-and-apt-repo](https://earthly.dev/blog/creating-and-hosting-your-own-deb-packages-and-apt-repo/)
-* [create-simple-apt-repo](https://www.cnblogs.com/bamanzi/p/create-simple-apt-repo.html)
-* [gpg](http://ruanyifeng.com/blog/2013/07/gpg.html)
+* <https://earthly.dev/blog/creating-and-hosting-your-own-deb-packages-and-apt-repo>
+* <https://www.cnblogs.com/bamanzi/p/create-simple-apt-repo.html>
+* <http://ruanyifeng.com/blog/2013/07/gpg.html>
