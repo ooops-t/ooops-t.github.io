@@ -1,0 +1,14 @@
+---
+---
+
+@import "jekyll-theme-merlot"
+
+@font-face {
+    font-family: "ConsolaMono";
+    src: url("/assets/fonts/ConsolaMono.tty")
+}
+
+body {
+    font-family: "Times New Roman", "ConsolaMono";
+    font-size: 20px;
+}
