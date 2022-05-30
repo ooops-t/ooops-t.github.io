@@ -1,1 +1,0 @@
-# Ooops-t Personal Blog
