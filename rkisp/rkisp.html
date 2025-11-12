@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-11-12 Wed 11:00 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rockchip ISP 使用教程</title>
+<meta name="author" content="taocheng" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Rockchip ISP 使用教程</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org54c262a">1. RKISP 简介</a>
+<ul>
+<li><a href="#org25f3340">1.1. RKISP 和 RKAIQ</a></li>
+<li><a href="#orga931a8d">1.2. RKISP 系统框图</a></li>
+<li><a href="#org0ee5dfe">1.3. RKISP 软件架构框图</a></li>
+<li><a href="#org054b0f4">1.4. RKISP 硬件链接框图</a></li>
+<li><a href="#orgf690f30">1.5. 硬件通路框图</a></li>
+<li><a href="#org5ee52fc">1.6. 多摄像头软件通路</a></li>
+</ul>
+</li>
+<li><a href="#org36c08f3">2. 设备端使能 rkisp</a>
+<ul>
+<li><a href="#org6ddf6eb">2.1. 内核驱动</a></li>
+<li><a href="#orga169fd9">2.2. 设备树</a></li>
+<li><a href="#org7fc0387">2.3. 验证</a></li>
+</ul>
+</li>
+<li><a href="#orgbc67a49">3. RKAIQ 相关工具</a>
+<ul>
+<li><a href="#orgda7a39b">3.1. 编译</a></li>
+<li><a href="#orgdd818e2">3.2. 运行测试</a>
+<ul>
+<li><a href="#org015ddd5">3.2.1. <code>rkaiq_tool_server</code></a></li>
+<li><a href="#orgedc5f0a">3.2.2. <code>rkaiq_3A_server</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org95797cf">4. 参考文献</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org54c262a" class="outline-2">
+<h2 id="org54c262a"><span class="section-number-2">1.</span> RKISP 简介</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+ISP 包含了一系列的图像处理算法模块，主要包含：暗电流矫正、坏点矫正、3A、HDR、镜头阴影矫正、镜头畸形矫正、3DLUT、
+去噪（包含 RAW 域去噪、多帧降噪、颜色去燥等）、锐化等。由于不同传感器的差异以及拍摄环境的多样性，传感器输出的原始
+数据和人们预期的图像有一定差距，因此 ISP 就起到两相当重要的作用。例如：夜间光照不足、大雾、沙尘等，均会使采集的图
+像造成影响，存在成像模糊、噪声污染及曝光不均等问题，而经过 ISP 图像处理的图像会有明显的优化。
+</p>
+</div>
+<div id="outline-container-org25f3340" class="outline-3">
+<h3 id="org25f3340"><span class="section-number-3">1.1.</span> RKISP 和 RKAIQ</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+RKISP 包含硬件算法实现及软件逻辑控制两个部分。RKAIQ 为软件逻辑控制部分的实现。
+</p>
+
+<p>
+RKAIQ 软件模块主要实现的功能为：从 ISP 驱动获取图像统计，结合 IQ Tuning 参数，使用一系列算法计算出新的 ISP、Sensor
+等硬件参数，不断迭代该过程，最终达到最优的图像效果。
+</p>
+</div>
+</div>
+<div id="outline-container-orga931a8d" class="outline-3">
+<h3 id="orga931a8d"><span class="section-number-3">1.2.</span> RKISP 系统框图</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+Sensor 输出数据流给 ISP HW，ISP HW 再输出经过一系列图像处理算法后的图像。RKAIQ 不断的从 ISP HW 获取统计数据，并经过
+3A 等算法生成新的参数反馈给各硬件模块。
+</p>
+
+
+<div id="orgae11e3a" class="figure">
+<p><img src="./imgs/rkisp-system.png" alt="rkisp-system.png" align="center" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org0ee5dfe" class="outline-3">
+<h3 id="org0ee5dfe"><span class="section-number-3">1.3.</span> RKISP 软件架构框图</h3>
+<div class="outline-text-3" id="text-1-3">
+
+<div id="orgb46f6ca" class="figure">
+<p><img src="./imgs/rkisp-sofware.png" alt="rkisp-sofware.png" align="center" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org054b0f4" class="outline-3">
+<h3 id="org054b0f4"><span class="section-number-3">1.4.</span> RKISP 硬件链接框图</h3>
+<div class="outline-text-3" id="text-1-4">
+
+<div id="org825db4c" class="figure">
+<p><img src="./imgs/rkisp-hardware.png" alt="rkisp-hardware.png" align="center" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf690f30" class="outline-3">
+<h3 id="orgf690f30"><span class="section-number-3">1.5.</span> 硬件通路框图</h3>
+<div class="outline-text-3" id="text-1-5">
+
+<div id="orgecd41df" class="figure">
+<p><img src="./imgs/rk3588-hardware.png" alt="rk3588-hardware.png" align="center" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org5ee52fc" class="outline-3">
+<h3 id="org5ee52fc"><span class="section-number-3">1.6.</span> 多摄像头软件通路</h3>
+<div class="outline-text-3" id="text-1-6">
+<p>
+单路硬件 ISP 最多支持 4 路复用，ISP 复用情况支持分辨率如下:
+</p>
+<ul class="org-ul">
+<li>2 路复用：最大分辨率为 3840x2160</li>
+<li>3 路或 4 路复用：最大分辨率为 2560x1536</li>
+</ul>
+
+
+<div id="org20e71d0" class="figure">
+<p><img src="./imgs/mulitcamera.png" alt="mulitcamera.png" align="center" />
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org36c08f3" class="outline-2">
+<h2 id="org36c08f3"><span class="section-number-2">2.</span> 设备端使能 rkisp</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-org6ddf6eb" class="outline-3">
+<h3 id="org6ddf6eb"><span class="section-number-3">2.1.</span> 内核驱动</h3>
+<div class="outline-text-3" id="text-2-1">
+<div class="org-src-container">
+<pre class="src src-shell">CONFIG_PHY_ROCKCHIP_CSI2_DPHY=y
+CONFIG_VIDEO_ROCKCHIP_CIF=y
+CONFIG_VIDEO_ROCKCHIP_ISP=y
+CONFIG_VIDEO_ROCKCHIP_ISP_VERSION_V30=y
+CONFIG_VIDEO_ROCKCHIP_ISPP=y
+CONFIG_VIDEO_ROCKCHIP_ISPP_VERSION_V20=y
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orga169fd9" class="outline-3">
+<h3 id="orga169fd9"><span class="section-number-3">2.2.</span> 设备树</h3>
+<div class="outline-text-3" id="text-2-2">
+<div class="org-src-container">
+<pre class="src src-dts">&amp;rkcif {
+        status = "okay";
+};
+
+&amp;rkcif_mmu {
+        status = "okay";
+};
+
+&amp;csi2_dphy0_hw {
+        status = "okay";
+};
+
+&amp;csi2_dphy1 {
+        status = "disabled";
+        ports {
+                #address-cells = &lt;1&gt;;
+                #size-cells = &lt;0&gt;;
+                port@0 {
+                        reg = &lt;0&gt;;
+                        #address-cells = &lt;1&gt;;
+                        #size-cells = &lt;0&gt;;
+
+                        mipidphy1_in_ucam2: endpoint@2 {
+                                reg = &lt;2&gt;;
+                                remote-endpoint = &lt;&amp;og02b1b_1_out1&gt;;
+                                data-lanes = &lt;1 2&gt;;
+                        };
+                };
+
+                port@1 {
+                        reg = &lt;1&gt;;
+                        #address-cells = &lt;1&gt;;
+                        #size-cells = &lt;0&gt;;
+                        csidphy0_out: endpoint@0 {
+                                reg = &lt;0&gt;;
+                                remote-endpoint = &lt;&amp;mipi2_csi2_input&gt;;
+                        };
+                };
+        };
+};
+
+&amp;i2c1{
+        status = "okay";
+
+        og02b1b: og02b1b@60 {
+                compatible = "ovti,og02b1b";
+                status = "disabled";
+                reg = &lt;0x60&gt;;
+                clocks = &lt;&amp;cru CLK_MIPI_CAMARAOUT_M1&gt;;
+                clock-names = "xvclk";
+                pinctrl-names = "default";
+                pinctrl-0 = &lt;&amp;mipim1_camera1_clk&gt;;
+                power-domains = &lt;&amp;power RK3588_PD_VI&gt;;
+                reset-gpios = &lt;&amp;gpio3 RK_PC1 GPIO_ACTIVE_LOW&gt;;
+                rockchip,camera-module-index = &lt;0&gt;;
+                rockchip,camera-module-facing = "back";
+                rockchip,camera-module-name = "og02b1b";
+                rockchip,camera-module-lens-name = "hcfa-og02b1b-sensor";
+                port {
+                        og02b1b_1_out1: endpoint {
+                                remote-endpoint = &lt;&amp;mipidphy1_in_ucam2&gt;;
+                                data-lanes = &lt;1 2&gt;;
+                        };
+                };
+        };
+};
+
+&amp;mipi2_csi2 {
+        status = "disabled";
+        ports {
+                #address-cells = &lt;1&gt;;
+                #size-cells = &lt;0&gt;;
+                port@0 {
+                        reg = &lt;0&gt;;
+                        #address-cells = &lt;1&gt;;
+                        #size-cells = &lt;0&gt;;
+                        mipi2_csi2_input: endpoint@1 {
+                                reg = &lt;1&gt;;
+                                remote-endpoint = &lt;&amp;csidphy0_out&gt;;
+                        };
+                };
+                port@1 {
+                        reg = &lt;1&gt;;
+                        #address-cells = &lt;1&gt;;
+                        #size-cells = &lt;0&gt;;
+                        mipi2_csi2_output: endpoint@0 {
+                                reg = &lt;0&gt;;
+                                remote-endpoint = &lt;&amp;cif_mipi_in2&gt;;
+                        };
+                };
+        };
+};
+
+&amp;rkcif_mipi_lvds2 {
+        status = "disabled";
+        port {
+                cif_mipi_in2: endpoint {
+                        remote-endpoint = &lt;&amp;mipi2_csi2_output&gt;;
+                };
+        };
+};
+
+&amp;rkcif_mipi_lvds2_sditf {
+        status = "disabled";
+        port {
+                mipi2_lvds_sditf: endpoint {
+                        remote-endpoint = &lt;&amp;isp0_vir0&gt;;
+                };
+        };
+};
+
+&amp;rkisp0_vir0 {
+        status = "disabled";
+        port {
+                #address-cells = &lt;1&gt;;
+                #size-cells = &lt;0&gt;;
+                isp0_vir0: endpoint@0 {
+                        reg = &lt;0&gt;;
+                        remote-endpoint = &lt;&amp;mipi2_lvds_sditf&gt;;
+                };
+        };
+};
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org7fc0387" class="outline-3">
+<h3 id="org7fc0387"><span class="section-number-3">2.3.</span> 验证</h3>
+<div class="outline-text-3" id="text-2-3">
+<div class="org-src-container">
+<pre class="src src-shell">dmesg | grep og02b1b # 摄像头 Sensor
+# [   29.149878] og02b1b 1-0060: driver version: 00.01.05
+# [   29.170266] og02b1b 1-0060: Detected OG02B1B 3f 02 0b sensor
+# [   29.204766] og02b1b 1-0060: Consider updating driver og02b1b to match on endpoints
+# [   29.205466] rockchip-csi2-dphy csi2-dphy1: dphy1 matches m00_b_og02b1b 1-0060:bus type 5
+dmesg | grep dphy # Rockchip 的 csi2 的 phy
+# [   28.557481] rockchip-csi2-dphy-hw fedc0000.csi2-dphy0-hw: csi2 dphy hw probe successfully!
+# [   28.558352] rockchip-csi2-dphy-hw fedc8000.csi2-dphy1-hw: csi2 dphy hw probe successfully!
+# [   29.205466] rockchip-csi2-dphy csi2-dphy1: dphy1 matches m00_b_og02b1b 1-0060:bus type 5
+# [   29.208028] rockchip-csi2-dphy csi2-dphy1: csi2 dphy1 probe successfully!
+dmesg | grep rkcif # Rockchip 的摄像头接口
+# [   28.931171] rkcif rkcif-mipi-lvds2: rkcif driver version: v00.02.00
+# [   28.932749] rkcif rkcif-mipi-lvds2: attach to cif hw node
+# [   29.016251] rockchip-mipi-csi2: probe success, v4l2_dev:rkcif-mipi-lvds2!
+# [   29.207247] rkcif-mipi-lvds2: Async subdev notifier completed
+dmesg | grep rkisp # Rockchip 的 rkisp
+# [   29.028228] rkisp rkisp0-vir0: rkisp driver version: v02.04.00
+# [   29.029315] rkisp rkisp0-vir0: No memory-region-thunderboot specified
+# [   29.208531] rkisp0-vir0: Async subdev notifier completed
+# [   29.496732] rkisp rkisp0-vir0: clear unready subdev num: 0
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgbc67a49" class="outline-2">
+<h2 id="orgbc67a49"><span class="section-number-2">3.</span> RKAIQ 相关工具</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+RKAIQ 为 Rockchip 提供的 ISP 参数调试工具。在 Rockchip 官方 SDK 中有提供。此处采用第三方开发板厂商上传的版本，
+下载链接为 <a href="https://gitlab.com/khadas-edge2/external_camera_engine_rkaiq">khadas-edge2/external<sub>camera</sub><sub>engine</sub><sub>rkaiq</sub></a>
+</p>
+</div>
+<div id="outline-container-orgda7a39b" class="outline-3">
+<h3 id="orgda7a39b"><span class="section-number-3">3.1.</span> 编译</h3>
+<div class="outline-text-3" id="text-3-1">
+<div class="org-src-container">
+<pre class="src src-shell">cmake -DARCH=aarch64 \
+      -DCMAKE_BUILD_TYPE=MinSizeRel \
+      -DCMAKE_SKIP_RPATH=TRUE \
+      -DCMAKE_EXPORT_COMPILE_COMMANDS=YES \
+      -DRKAIQ_TARGET_SOC=rk3588 \
+      -DISP_HW_VERSION=-DISP_HW_V30 \
+      -DRKAIQ_BUILD_BINARY_IQ=OFF \
+      -DRKAIQ_USE_RAWSTREAM_LIB=OFF \
+      -DRKAIQ_HAVE_FAKECAM=ON \
+      -DRKAIQ_ENABLE_AF=ON \
+      -B build .
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgdd818e2" class="outline-3">
+<h3 id="orgdd818e2"><span class="section-number-3">3.2.</span> 运行测试</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+RKAIQ 主要提供两个工具， <code>rkaiq_tool_server</code> 和 <code>rkaiq_3A_server</code> 。两个工具的使用方法参考官方相关文档。
+第三方上传文档<a href="https://dl.radxa.com/tools/windows/Rockchip_IQ_Tools_Guide_CN_v2.0.8.pdf"> Rockchip<sub>IQ</sub><sub>Tools</sub><sub>Guide</sub><sub>CN</sub><sub>v2.0.8.pdf</sub></a>
+</p>
+</div>
+<div id="outline-container-org015ddd5" class="outline-4">
+<h4 id="org015ddd5"><span class="section-number-4">3.2.1.</span> <code>rkaiq_tool_server</code></h4>
+<div class="outline-text-4" id="text-3-2-1">
+<p>
+该工具的主要的作用是在线调试 ISP 参数。
+</p>
+</div>
+</div>
+<div id="outline-container-orgedc5f0a" class="outline-4">
+<h4 id="orgedc5f0a"><span class="section-number-4">3.2.2.</span> <code>rkaiq_3A_server</code></h4>
+<div class="outline-text-4" id="text-3-2-2">
+<p>
+该工具的主要的作用是加载 ISP 参数。
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org95797cf" class="outline-2">
+<h2 id="org95797cf"><span class="section-number-2">4.</span> 参考文献</h2>
+<div class="outline-text-2" id="text-4">
+<ul class="org-ul">
+<li><a href="https://opensource.rock-chips.com/wiki_Rockchip-isp1">https://opensource.rock-chips.com/wiki_Rockchip-isp1</a></li>
+<li><a href="https://www.cnblogs.com/yikoulinux/p/17099867.html">https://www.cnblogs.com/yikoulinux/p/17099867.html</a></li>
+<li><a href="https://doc.embedfire.com/linux/rk356x/quick_start/zh/latest/quick_start/isp/isp.html">https://doc.embedfire.com/linux/rk356x/quick_start/zh/latest/quick_start/isp/isp.html</a></li>
+<li><a href="https://www.cnblogs.com/Tronlong818/p/18165948">https://www.cnblogs.com/Tronlong818/p/18165948</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/634201418">https://zhuanlan.zhihu.com/p/634201418</a></li>
+<li><a href="https://wiki.t-firefly.com/en/ROC-RK3588S-PC/usage_camera.html">https://wiki.t-firefly.com/en/ROC-RK3588S-PC/usage_camera.html</a></li>
+<li><a href="https://dl.vamrs.com/products/rock960/docs/sw/Rockchip%C2%A0Linux%20Camera%C2%A0Developer%20Guide%20V1.1.pdf">https://dl.vamrs.com/products/rock960/docs/sw/Rockchip%C2%A0Linux%20Camera%C2%A0Developer%20Guide%20V1.1.pdf</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: 2025-07-31 Thu 00:00</p>
+<p class="author">Author: taocheng</p>
+<p class="date">Created: 2025-11-12 Wed 11:00</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

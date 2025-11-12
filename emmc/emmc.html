@@ -1,0 +1,769 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-11-12 Wed 11:00 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>eMMC</title>
+<meta name="author" content="taocheng" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/code-copy.css"/>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/search.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/search.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/code-copy.js"></script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">eMMC</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org9c0fb46">1. eMMC 简介</a></li>
+<li><a href="#org371c310">2. eMMC 结构框图</a></li>
+<li><a href="#org0edb807">3. eMMC 常用寄存器</a>
+<ul>
+<li><a href="#org6458fdb">3.1. Operation Conditions Register(OCR)</a>
+<ul>
+<li><a href="#orge74b72a">3.1.1. 读取 OCR 寄存器</a></li>
+</ul>
+</li>
+<li><a href="#org9d1f8b6">3.2. Card IDentification Register(CID)</a>
+<ul>
+<li><a href="#orgd964148">3.2.1. 读取 CID 寄存器</a></li>
+</ul>
+</li>
+<li><a href="#orga1d7649">3.3. Card-Specific Data Register(CSD)</a>
+<ul>
+<li><a href="#orgb889dd7">3.3.1. 读取 CSD 寄存器</a></li>
+</ul>
+</li>
+<li><a href="#org0e44758">3.4. Extended CSD Register(ExtCSD)</a>
+<ul>
+<li><a href="#org34af9ce">3.4.1. 读取 ExtCSD 寄存器</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgbcadd16">4. eMMC 分区</a>
+<ul>
+<li><a href="#org10cc303">4.1. Boot Area Parition</a>
+<ul>
+<li><a href="#orge16096d">4.1.1. 查看启动分区大小</a></li>
+<li><a href="#org4077fff">4.1.2. 设置启动分区</a></li>
+<li><a href="#orge2e80e0">4.1.3. 设置启动分区写保护</a></li>
+<li><a href="#orgc489a00">4.1.4. 设置启动分区总线宽度</a></li>
+</ul>
+</li>
+<li><a href="#org55fe8d7">4.2. RPMB(Replay Protected Memory Block) Parition</a>
+<ul>
+<li><a href="#orgec7b33c">4.2.1. RPMB Read</a></li>
+<li><a href="#org5d62064">4.2.2. RPMB Write</a></li>
+<li><a href="#org575f514">4.2.3. RPMB 操作指令</a></li>
+</ul>
+</li>
+<li><a href="#orgefba0f1">4.3. General Purpose Parition(GPP)</a>
+<ul>
+<li><a href="#org3f08ecf">4.3.1. 创建 GPP 分区</a></li>
+</ul>
+</li>
+<li><a href="#orgcccec5b">4.4. User Data Area(UDA) Parition</a></li>
+</ul>
+</li>
+<li><a href="#orgf8a48b9">5. 参考文档</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org9c0fb46" class="outline-2">
+<h2 id="org9c0fb46"><span class="section-number-2">1.</span> eMMC 简介</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+<code>eMMC</code> 是 <code>embedded MultiMediaCard</code> 的简称，即嵌入式多媒体卡，是一种闪存卡的
+标准，它定义了基于嵌入式多媒体卡的存储系统的物理架构和访问接口及协议，具体由电子
+设备工程联合委员会 <code>JEDEC</code> 订立和发布。它是对 <code>MMC</code> 的一个拓展，具有体积小，功
+耗低，容量大等优点，非常适合用作智能手机、平板电脑、移动互联网设备等消费类电子设
+备的存储介质。
+</p>
+</div>
+</div>
+<div id="outline-container-org371c310" class="outline-2">
+<h2 id="org371c310"><span class="section-number-2">2.</span> eMMC 结构框图</h2>
+<div class="outline-text-2" id="text-2">
+
+<div id="orga0e664e" class="figure">
+<p><img src="./imgs/eMMC-block-diagram.png" alt="eMMC-block-diagram.png" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org0edb807" class="outline-2">
+<h2 id="org0edb807"><span class="section-number-2">3.</span> eMMC 常用寄存器</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-org6458fdb" class="outline-3">
+<h3 id="org6458fdb"><span class="section-number-3">3.1.</span> Operation Conditions Register(OCR)</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+工作条件寄存器，包含 <code>32bit</code> ，内容如下:
+</p>
+
+<div id="org1297cfd" class="figure">
+<p><img src="./imgs/OCR-register.png" alt="OCR-register.png" />
+</p>
+</div>
+</div>
+<div id="outline-container-orge74b72a" class="outline-4">
+<h4 id="orge74b72a"><span class="section-number-4">3.1.1.</span> 读取 OCR 寄存器</h4>
+<div class="outline-text-4" id="text-3-1-1">
+<div class="org-src-container">
+<pre class="src src-bash"># Dump
+hexdump -C /sys/block/mmcblk1/device/ocr 
+## 00000000  30 78 30 30 33 30 30 30  30 30 0a                 |0x00300000.|
+## 0000000b
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org9d1f8b6" class="outline-3">
+<h3 id="org9d1f8b6"><span class="section-number-3">3.2.</span> Card IDentification Register(CID)</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+设备身份寄存器，包含 <code>128bit</code> ，内容如下:
+</p>
+
+<div id="org6ff2cf4" class="figure">
+<p><img src="./imgs/CID-register.png" alt="CID-register.png" />
+</p>
+</div>
+</div>
+<div id="outline-container-orgd964148" class="outline-4">
+<h4 id="orgd964148"><span class="section-number-4">3.2.1.</span> 读取 CID 寄存器</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<div class="org-src-container">
+<pre class="src src-bash"># Read CID Register
+mmc cid read /sys/block/mmcblk1/device
+## type: 'MMC'
+## manufacturer: 'Unlisted' ''
+## product: 'SPeCCC' 0.21523
+## serial: 0x00000001
+## manfacturing date: 1999 oct
+
+# Other path read
+mmc cid read /sys/class/mmc_host/mmc1/mmc1\:0001/
+## type: 'MMC'
+## manufacturer: 'Unlisted' ''
+## product: 'SPeCCC' 0.21523
+## serial: 0x00000001
+## manfacturing date: 1999 oct
+
+# Dump
+hexdump -C /sys/block/mmcblk1/device/cid
+## 00000000  65 61 30 31 30 65 35 33  35 30 36 35 34 64 34 64  |ea010e5350654d4d|
+## 00000010  34 33 31 30 30 30 30 30  35 34 31 33 32 39 61 65  |43100000541329ae|
+## 00000020  0a                                                |.|
+## 00000021
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orga1d7649" class="outline-3">
+<h3 id="orga1d7649"><span class="section-number-3">3.3.</span> Card-Specific Data Register(CSD)</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+设备特性数据寄存器，包含 <code>128bit</code> ，内容如下:
+</p>
+
+<div id="org63e8e2b" class="figure">
+<p><img src="./imgs/CSD-register.png" alt="CSD-register.png" />
+</p>
+</div>
+</div>
+<div id="outline-container-orgb889dd7" class="outline-4">
+<h4 id="orgb889dd7"><span class="section-number-4">3.3.1.</span> 读取 CSD 寄存器</h4>
+<div class="outline-text-4" id="text-3-3-1">
+<div class="org-src-container">
+<pre class="src src-bash"># Read CSD register
+mmc csd read /sys/block/mmcblk1/device
+## type: 'MMC'
+## version: reserved
+## card classes: 8, 6, 4, 2, 0, 
+## capacity: 26.66Mbyte (27959296 bytes, 54608 sectors, 512 bytes each)
+
+# Dump
+hexdump -C /sys/block/mmcblk1/device/csd 
+## 00000000  64 30 66 66 66 66 33 32  31 66 35 39 30 33 66 66  |d0ffff321f5903ff|
+## 00000010  64 66 37 66 66 66 38 30  38 61 34 30 30 30 63 30  |df7fff808a4000c0|
+## 00000020  0a                                                |.|
+## 00000021
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org0e44758" class="outline-3">
+<h3 id="org0e44758"><span class="section-number-3">3.4.</span> Extended CSD Register(ExtCSD)</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+扩展设备特性数据寄存器，包含 <code>512bytes</code> ，内容如下:
+<img src="./imgs/ExtCSD-register-1.png" alt="ExtCSD-register-1.png" />
+<img src="./imgs/ExtCSD-register-2.png" alt="ExtCSD-register-2.png" />
+<img src="./imgs/ExtCSD-register-3.png" alt="ExtCSD-register-3.png" />
+<img src="./imgs/ExtCSD-register-4.png" alt="ExtCSD-register-4.png" />
+<img src="./imgs/ExtCSD-register-5.png" alt="ExtCSD-register-5.png" />
+<img src="./imgs/ExtCSD-register-6.png" alt="ExtCSD-register-6.png" />
+</p>
+</div>
+<div id="outline-container-org34af9ce" class="outline-4">
+<h4 id="org34af9ce"><span class="section-number-4">3.4.1.</span> 读取 ExtCSD 寄存器</h4>
+<div class="outline-text-4" id="text-3-4-1">
+<div class="org-src-container">
+<pre class="src src-bash"># Read ExtCSD register
+mmc extcsd read /dev/mmcblk1
+## =============================================
+##   Extended CSD rev 1.7 (MMC 5.0)
+## =============================================
+## 
+## Card Supported Command sets [S_CMD_SET: 0x01]
+## HPI Features [HPI_FEATURE: 0x01]: implementation based on CMD13
+## Background operations support [BKOPS_SUPPORT: 0x01]
+## Max Packet Read Cmd [MAX_PACKED_READS: 0x3f]
+## Max Packet Write Cmd [MAX_PACKED_WRITES: 0x3f]
+## Data TAG support [DATA_TAG_SUPPORT: 0x01]
+## Data TAG Unit Size [TAG_UNIT_SIZE: 0x03]
+## Tag Resources Size [TAG_RES_SIZE: 0x00]
+## Context Management Capabilities [CONTEXT_CAPABILITIES: 0x05]
+## Large Unit Size [LARGE_UNIT_SIZE_M1: 0x0b]
+## Extended partition attribute support [EXT_SUPPORT: 0x03]
+## Generic CMD6 Timer [GENERIC_CMD6_TIME: 0x0a]
+## Power off notification [POWER_OFF_LONG_TIME: 0x64]
+## Cache Size [CACHE_SIZE] is 256 KiB
+## Background operations status [BKOPS_STATUS: 0x00]
+## 1st Initialisation Time after programmed sector [INI_TIMEOUT_AP: 0x1e]
+## Power class for 52MHz, DDR at 3.6V [PWR_CL_DDR_52_360: 0x00]
+## Power class for 52MHz, DDR at 1.95V [PWR_CL_DDR_52_195: 0x00]
+## Power class for 200MHz at 3.6V [PWR_CL_200_360: 0x00]
+## Power class for 200MHz, at 1.95V [PWR_CL_200_195: 0x00]
+## Minimum Performance for 8bit at 52MHz in DDR mode:
+##  [MIN_PERF_DDR_W_8_52: 0x00]
+##  [MIN_PERF_DDR_R_8_52: 0x00]
+## TRIM Multiplier [TRIM_MULT: 0x02]
+## Secure Feature support [SEC_FEATURE_SUPPORT: 0x55]
+## Boot Information [BOOT_INFO: 0x07]
+##  Device supports alternative boot method
+##  Device supports dual data rate during boot
+##  Device supports high speed timing during boot
+## Boot partition size [BOOT_SIZE_MULTI: 0x20]
+## Access size [ACC_SIZE: 0x07]
+## High-capacity erase unit size [HC_ERASE_GRP_SIZE: 0x01]
+##  i.e. 512 KiB
+## High-capacity erase timeout [ERASE_TIMEOUT_MULT: 0x0a]
+## Reliable write sector count [REL_WR_SEC_C: 0x01]
+## High-capacity W protect group size [HC_WP_GRP_SIZE: 0x10]
+##  i.e. 8192 KiB
+## Sleep current (VCC) [S_C_VCC: 0x07]
+## Sleep current (VCCQ) [S_C_VCCQ: 0x07]
+## Sleep/awake timeout [S_A_TIMEOUT: 0x15]
+## Sector Count [SEC_COUNT: 0x00e8c000]
+##  Device is block-addressed
+## Minimum Write Performance for 8bit:
+##  [MIN_PERF_W_8_52: 0x00]
+##  [MIN_PERF_R_8_52: 0x00]
+##  [MIN_PERF_W_8_26_4_52: 0x00]
+##  [MIN_PERF_R_8_26_4_52: 0x00]
+## Minimum Write Performance for 4bit:
+##  [MIN_PERF_W_4_26: 0x00]
+##  [MIN_PERF_R_4_26: 0x00]
+## Power classes registers:
+##  [PWR_CL_26_360: 0x00]
+##  [PWR_CL_52_360: 0x00]
+##  [PWR_CL_26_195: 0x00]
+##  [PWR_CL_52_195: 0x00]
+## Partition switching timing [PARTITION_SWITCH_TIME: 0x06]
+## Out-of-interrupt busy timing [OUT_OF_INTERRUPT_TIME: 0x19]
+## I/O Driver Strength [DRIVER_STRENGTH: 0x1f]
+## Card Type [CARD_TYPE: 0x57]
+##  HS200 Single Data Rate eMMC @200MHz 1.8VI/O
+##  HS Dual Data Rate eMMC @52MHz 1.8V or 3VI/O
+##  HS eMMC @52MHz - at rated device voltage(s)
+##  HS eMMC @26MHz - at rated device voltage(s)
+## CSD structure version [CSD_STRUCTURE: 0x02]
+## Command set [CMD_SET: 0x01]
+## Command set revision [CMD_SET_REV: 0x00]
+## Power class [POWER_CLASS: 0x00]
+## High-speed interface timing [HS_TIMING: 0x01]
+## Erased memory content [ERASED_MEM_CONT: 0x00]
+## Boot configuration bytes [PARTITION_CONFIG: 0x48]
+##  Boot Partition 1 enabled
+##  No access to boot partition
+## Boot config protection [BOOT_CONFIG_PROT: 0x00]
+## Boot bus Conditions [BOOT_BUS_CONDITIONS: 0x16]
+## High-density erase group definition [ERASE_GROUP_DEF: 0x01]
+## Boot write protection status registers [BOOT_WP_STATUS]: 0x00
+## Boot Area Write protection [BOOT_WP]: 0x00
+##  Power ro locking: possible
+##  Permanent ro locking: possible
+##  ro lock status: not locked
+## User area write protection register [USER_WP]: 0x00
+## FW configuration [FW_CONFIG]: 0x00
+## RPMB Size [RPMB_SIZE_MULT]: 0x20
+## Write reliability setting register [WR_REL_SET]: 0x1f
+##  user area: the device protects existing data if a power failure occurs during a write operation
+##  partition 1: the device protects existing data if a power failure occurs during a write operation
+##  partition 2: the device protects existing data if a power failure occurs during a write operation
+##  partition 3: the device protects existing data if a power failure occurs during a write operation
+##  partition 4: the device protects existing data if a power failure occurs during a write operation
+## Write reliability parameter register [WR_REL_PARAM]: 0x04
+##  Device supports the enhanced def. of reliable write
+## Enable background operations handshake [BKOPS_EN]: 0x00
+## H/W reset function [RST_N_FUNCTION]: 0x00
+## HPI management [HPI_MGMT]: 0x01
+## Partitioning Support [PARTITIONING_SUPPORT]: 0x07
+##  Device support partitioning feature
+##  Device can have enhanced tech.
+## Max Enhanced Area Size [MAX_ENH_SIZE_MULT]: 0x000000
+##  i.e. 0 KiB
+## Partitions attribute [PARTITIONS_ATTRIBUTE]: 0x00
+## Partitioning Setting [PARTITION_SETTING_COMPLETED]: 0x00
+##  Device partition setting NOT complete
+## General Purpose Partition Size
+##  [GP_SIZE_MULT_4]: 0x000000
+##  [GP_SIZE_MULT_3]: 0x000000
+##  [GP_SIZE_MULT_2]: 0x000000
+##  [GP_SIZE_MULT_1]: 0x000000
+## Enhanced User Data Area Size [ENH_SIZE_MULT]: 0x000000
+##  i.e. 0 KiB
+## Enhanced User Data Start Address [ENH_START_ADDR]: 0x00000000
+##  i.e. 0 bytes offset
+## Bad Block Management mode [SEC_BAD_BLK_MGMNT]: 0x00
+## Periodic Wake-up [PERIODIC_WAKEUP]: 0x00
+## Program CID/CSD in DDR mode support [PROGRAM_CID_CSD_DDR_SUPPORT]: 0x01
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[127]]: 0x09
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[126]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[125]]: 0x30
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[124]]: 0x30
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[123]]: 0x30
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[122]]: 0x30
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[121]]: 0x31
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[120]]: 0x37
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[119]]: 0x30
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[118]]: 0x31
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[117]]: 0x30
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[116]]: 0x31
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[115]]: 0x4b
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[114]]: 0x39
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[113]]: 0x47
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[112]]: 0x43
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[111]]: 0x47
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[110]]: 0x44
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[109]]: 0x38
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[108]]: 0x55
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[107]]: 0x30
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[106]]: 0x46
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[105]]: 0x41
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[104]]: 0x53
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[103]]: 0x32
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[102]]: 0x37
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[101]]: 0x32
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[100]]: 0x36
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[99]]: 0x2d
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[98]]: 0x45
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[97]]: 0x44
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[96]]: 0x20
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[95]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[94]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[93]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[92]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[91]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[90]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[89]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[88]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[87]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[86]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[85]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[84]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[83]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[82]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[81]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[80]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[79]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[78]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[77]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[76]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[75]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[74]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[73]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[72]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[71]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[70]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[69]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[68]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[67]]: 0x9a
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[66]]: 0x00
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[65]]: 0x01
+## Vendor Specific Fields [VENDOR_SPECIFIC_FIELD[64]]: 0xff
+## Native sector size [NATIVE_SECTOR_SIZE]: 0x00
+## Sector size emulation [USE_NATIVE_SECTOR]: 0x00
+## Sector size [DATA_SECTOR_SIZE]: 0x00
+## 1st initialization after disabling sector size emulation [INI_TIMEOUT_EMU]: 0x00
+## Class 6 commands control [CLASS_6_CTRL]: 0x00
+## Number of addressed group to be Released[DYNCAP_NEEDED]: 0x00
+## Exception events control [EXCEPTION_EVENTS_CTRL]: 0x0000
+## Exception events status[EXCEPTION_EVENTS_STATUS]: 0x0000
+## Extended Partitions Attribute [EXT_PARTITIONS_ATTRIBUTE]: 0x0000
+## Context configuration [CONTEXT_CONF[51]]: 0x00
+## Context configuration [CONTEXT_CONF[50]]: 0x00
+## Context configuration [CONTEXT_CONF[49]]: 0x00
+## Context configuration [CONTEXT_CONF[48]]: 0x00
+## Context configuration [CONTEXT_CONF[47]]: 0x00
+## Context configuration [CONTEXT_CONF[46]]: 0x00
+## Context configuration [CONTEXT_CONF[45]]: 0x00
+## Context configuration [CONTEXT_CONF[44]]: 0x00
+## Context configuration [CONTEXT_CONF[43]]: 0x00
+## Context configuration [CONTEXT_CONF[42]]: 0x00
+## Context configuration [CONTEXT_CONF[41]]: 0x00
+## Context configuration [CONTEXT_CONF[40]]: 0x00
+## Context configuration [CONTEXT_CONF[39]]: 0x00
+## Context configuration [CONTEXT_CONF[38]]: 0x00
+## Context configuration [CONTEXT_CONF[37]]: 0x00
+## Packed command status [PACKED_COMMAND_STATUS]: 0x00
+## Packed command failure index [PACKED_FAILURE_INDEX]: 0x00
+## Power Off Notification [POWER_OFF_NOTIFICATION]: 0x01
+## Control to turn the Cache ON/OFF [CACHE_CTRL]: 0x01
+## eMMC Firmware Version: 
+## eMMC Life Time Estimation A [EXT_CSD_DEVICE_LIFE_TIME_EST_TYP_A]: 0x01
+## eMMC Life Time Estimation B [EXT_CSD_DEVICE_LIFE_TIME_EST_TYP_B]: 0x01
+## eMMC Pre EOL information [EXT_CSD_PRE_EOL_INFO]: 0x01
+## Secure Removal Type [SECURE_REMOVAL_TYPE]: 0x09
+##  information is configured to be removed by an erase of the physical memory
+##  Supported Secure Removal Type:
+##   information removed by an erase of the physical memory
+##   information removed using a vendor defined
+## 
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgbcadd16" class="outline-2">
+<h2 id="orgbcadd16"><span class="section-number-2">4.</span> eMMC 分区</h2>
+<div class="outline-text-2" id="text-4">
+
+<div id="org2ebdfed" class="figure">
+<p><img src="./imgs/eMMC-paritions.png" alt="eMMC-paritions.png" />
+</p>
+</div>
+
+<p>
+<code>eMMC</code> 的每一个硬件分区的存储空间都是独立编址的，既访问地址为 <code>0-parition size</code> ，
+具体的数据读写操作实际访问哪一个硬件分区，是由 <code>eMMC</code> 的 <code>ExtCSD</code> 寄存器
+中的 <code>PARTITION_CONFIG Field Bit[2:0]: PARITION_ACCESS</code> 决定的，用户可以通过
+配置 <code>PARTITION_ACCESS</code> 来切换硬件分区的访问。也就是说，用户在访问特定的分区
+前，需要先发送配置 <code>PARTITION_ACCESS</code> 命令， 然后再发送相关的数据访问请求。
+</p>
+</div>
+<div id="outline-container-org10cc303" class="outline-3">
+<h3 id="org10cc303"><span class="section-number-3">4.1.</span> Boot Area Parition</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+<code>Boot Area</code> 包含两个 <code>Boot Area Parition</code> ，主要用于存储 <code>Bootloader</code> ，支持 <code>SOC</code> 从 <code>eMMC</code> 启动系统。
+通过设置 <code>BOOT_SIZE_MULT(ExtCSD[226])</code> 可以改变 <code>Boot Area Parition</code> 的大小。 <code>BOOT_SIZE_MULT</code> 默认
+为 <code>0x20(32)</code> ，应此 <code>Boot Area Parition</code> 默认大小为 <code>128KB * 32 = 4MB</code> 。 <code>BOOT_SIZE_MULT</code> 最大可以设置为
+<code>255</code> ，因此 <code>Boot Area Parition</code> 最大只能为 <code>128KB * 255 = 31.875MB</code> 。
+</p>
+</div>
+<div id="outline-container-orge16096d" class="outline-4">
+<h4 id="orge16096d"><span class="section-number-4">4.1.1.</span> 查看启动分区大小</h4>
+<div class="outline-text-4" id="text-4-1-1">
+<div class="org-src-container">
+<pre class="src src-bash"># Read BOOT_SIZE_MULT
+mmc extcsd read /dev/mmcblk1 |  grep BOOT_SIZE_MULT
+## Boot partition size [BOOT_SIZE_MULTI: 0x20]
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org4077fff" class="outline-4">
+<h4 id="org4077fff"><span class="section-number-4">4.1.2.</span> 设置启动分区</h4>
+<div class="outline-text-4" id="text-4-1-2">
+<p>
+通过设置 <code>PARITION_CONFIG(ExtCSD[179])</code> ，可以修改当前启动分区
+</p>
+
+<div id="orge12ec29" class="figure">
+<p><img src="./imgs/PARITION_CONFIG.png" alt="PARITION_CONFIG.png" />
+</p>
+</div>
+<div class="org-src-container">
+<pre class="src src-bash"># Query current boot parition
+mmc extcsd read /dev/mmcblk1 |  grep PARTITION_CONFIG
+## Boot configuration bytes [PARTITION_CONFIG: 0x48]
+
+# Set current boot parition to /dev/mmcblk1boot0
+mmc bootpart enable 1 1 /dev/mmcblk1
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orge2e80e0" class="outline-4">
+<h4 id="orge2e80e0"><span class="section-number-4">4.1.3.</span> 设置启动分区写保护</h4>
+<div class="outline-text-4" id="text-4-1-3">
+<p>
+通过设置 <code>BOOT_WP(ExtCSD[173])</code> ，使能当前启动分区的写保护。 <code>BOOT_WP_STATUS(ExtCSD[174])</code> 可以查询当前启动分区写保护的状态。
+<b>NOTE</b>: 想要开启写保护功能，每次上电都需要设置。
+</p>
+<div class="org-src-container">
+<pre class="src src-bash"># Read current boot parition write protect status
+mmc writeprotect boot get /dev/mmcblk1
+## Boot write protection status registers [BOOT_WP_STATUS]: 0x00
+## Boot Area Write protection [BOOT_WP]: 0x00
+##  Power ro locking: possible
+##  Permanent ro locking: possible
+##  ro lock status: not locked
+
+# Set current boot parititon write protect
+mmc writeprotect boot set /dev/mmcblk1
+# Get
+mmc writeprotect boot get /dev/mmcblk1
+## Boot write protection status registers [BOOT_WP_STATUS]: 0x05
+## Boot Area Write protection [BOOT_WP]: 0x01
+##  Power ro locking: possible
+##  Permanent ro locking: possible
+##  ro lock status: locked until next power on
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc489a00" class="outline-4">
+<h4 id="orgc489a00"><span class="section-number-4">4.1.4.</span> 设置启动分区总线宽度</h4>
+<div class="outline-text-4" id="text-4-1-4">
+<p>
+通过设置 <code>BOOT_BUS_WIDTH(ExtCSD[177])</code> ，可以改变当前启动分区的总线宽度，从而提升启动速度。
+<b>NOTE</b>: 需要根据 <code>SOC</code> 启动时支持的总线宽度来设置，不然会导致启动不了。
+</p>
+<div class="org-src-container">
+<pre class="src src-bash"># Set boot bus width
+mmc bootbus set &lt;boot_mode&gt; &lt;reset_boot_bus_conditions&gt; &lt;boot_bus_width&gt; &lt;device&gt;
+## Set Boot Bus Conditions.
+## &lt;boot_mode&gt; must be "single_backward|single_hs|dual"
+## &lt;reset_boot_bus_conditions&gt; must be "x1|retain"
+## &lt;boot_bus_width&gt; must be "x1|x4|x8"
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org55fe8d7" class="outline-3">
+<h3 id="org55fe8d7"><span class="section-number-3">4.2.</span> RPMB(Replay Protected Memory Block) Parition</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+<code>RPMB</code> 是 <code>eMMC</code> 中的一个具有 <code>安全特性</code> 的分区。 <code>eMMC</code> 在写入数据到 <code>RPMB</code> 时，
+会校验数据的合法性，只有指定的 <code>Host</code> 才能够写入，同时在读数据时，也提供了签名机制，
+保证 <code>Host</code> 读取到的数据是 <code>RPMB</code> 内部数据，而不是攻击者伪造的数据。
+</p>
+
+<p>
+<code>RPMB</code> 在实际应用中，通常用于存储一些有防止非法篡改需求的数据，例如手机上指纹支付相关
+的公钥，序列号等。 <code>RPMB</code> 中的数据使用明文存储，因此存储到 <code>RPMB</code> 的数据通常会进行加密
+后再存储。
+</p>
+
+<p>
+<code>RPMB Partition</code> 的大小是由 <code>RPMB_SIZE_MULT(ExtCSD[])</code> 决定，大小的计算公式如
+下: <code>Size = 128Kbytes x RPMB_SIZE_MULT</code> 。 <code>RPMB_SIZE_MULT</code> 默认下为 <code>0x20(32)</code> ，
+最大可以为 <code>128</code> ，即默认为 <code>4MB</code> ，最大容量大小可以为 <code>128 x 128 KB = 16384 KB = 16 MB</code> 。
+</p>
+</div>
+<div id="outline-container-orgec7b33c" class="outline-4">
+<h4 id="orgec7b33c"><span class="section-number-4">4.2.1.</span> RPMB Read</h4>
+<div class="outline-text-4" id="text-4-2-1">
+
+<div id="org83c85c7" class="figure">
+<p><img src="./imgs/RPMB-read.png" alt="RPMB-read.png" />
+</p>
+</div>
+
+<ul class="org-ul">
+<li>在 <code>Host</code> 端，发送读请求以及一个 <code>16Bytes</code> 随机数给 <code>Device</code> 端</li>
+
+<li>在 <code>Device</code> 端，将请求的数据从 <code>RPMB</code> 取出来，通过 <code>AuthKey</code> 对 <code>Data + 随机数</code> 使用
+<code>HMAC SHA-256</code> 算法签名后得到 <code>MAC</code> ，与 <code>Data + 随机数</code> 一起发送给 <code>Host</code> 端</li>
+
+<li>在 <code>Host</code> 端收到 <code>Devcie</code> 发送过来的数据，首先比较随机数是否与自己一致，如果一致，在
+<code>Host</code> 端使用自己的 <code>AuthKey</code> 对接收到的 <code>Data + 随机数</code> 使用 <code>HMAC SHA-256</code> 算法签名
+后得到 <code>MAC1</code> ，比较自己生成的 <code>MAC1</code> 与接收到的 <code>MAC</code> 是否一致。如果一致， <code>Host</code> 端
+就可以确定该 <code>Data</code> 是从 <code>RPMB</code> 读取到的，没有被修改过，而不是攻击者伪造的数据。</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org5d62064" class="outline-4">
+<h4 id="org5d62064"><span class="section-number-4">4.2.2.</span> RPMB Write</h4>
+<div class="outline-text-4" id="text-4-2-2">
+
+<div id="org318f3d5" class="figure">
+<p><img src="./imgs/RPMB-write.png" alt="RPMB-write.png" />
+</p>
+</div>
+
+<ul class="org-ul">
+<li>在 <code>Host</code> 端:
+<ul class="org-ul">
+<li>读取 <code>Write Counter</code></li>
+
+<li>使用 <code>AuthKey</code> 对 <code>Message(Data + Metadata) + Write Counter</code> 使用 <code>HMAC SHA-256</code> 算法签名后得到 <code>MAC</code></li>
+
+<li>将 <code>MAC + Message + Write Counter</code> 传给 <code>Device</code></li>
+</ul></li>
+
+<li>在 <code>Devices</code> 端:
+
+<ul class="org-ul">
+<li>接受到 <code>Host</code> 传送过来的 <code>MAC + Message + Write Counter</code></li>
+
+<li>比较接收到的 <code>Write Counter</code> 是否与自己的一致</li>
+
+<li>将接受到的 <code>Message + Write Counter + devcies</code> 端的 <code>AuthKey</code> 经过 <code>SHA-256</code> 生成 <code>MAC1</code></li>
+
+<li>将生成的 <code>MAC1</code> 与接收到的 <code>MAC</code> 进行比较，如果两者一致，就将 <code>Data</code> 写入到 <code>RPMB</code> 中， <code>Write Counter</code> 加 <code>1</code></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org575f514" class="outline-4">
+<h4 id="org575f514"><span class="section-number-4">4.2.3.</span> RPMB 操作指令</h4>
+<div class="outline-text-4" id="text-4-2-3">
+<div class="org-src-container">
+<pre class="src src-bash"># Set RPMB Authkey. Just program once(OTP)
+mmc rpmb write-key &lt;rpmb device&gt; &lt;key file&gt;
+## Program authentication key which is 32 bytes length and stored
+## in the specified file. Also you can specify '-' instead of
+##    key file path to read the key from stdin.
+##    NOTE!  This is a one-time programmable (unreversible) change.
+##    Example:
+##    $ echo -n AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHH | \
+##        mmc rpmb write-key /dev/mmcblk0rpmb -
+
+# Read write counter
+mmc rpmb read-counter &lt;rpmb device&gt;
+## Counter value for the &lt;rpmb device&gt; will be read to stdout.
+
+# Read RPMB data
+mmc rpmb read-block &lt;rpmb device&gt; &lt;address&gt; &lt;blocks count&gt; &lt;output file&gt; [key file]
+## Blocks of 256 bytes will be read from &lt;rpmb device&gt; to output
+## file or stdout if '-' is specified. If key is specified - read
+## data will be verified. Instead of regular path you can specify
+## '-' to read key from stdin.
+## Example:
+##   $ echo -n AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHH | \
+##     mmc rpmb read-block /dev/mmcblk0rpmb 0x02 2 /tmp/block -
+## or read two blocks without verification
+##   $ mmc rpmb read-block /dev/mmcblk0rpmb 0x02 2 /tmp/block
+
+# Write RPMB data
+mmc rpmb write-block &lt;rpmb device&gt; &lt;address&gt; &lt;256 byte data file&gt; &lt;key file&gt;
+## Block of 256 bytes will be written from data file to
+## &lt;rpmb device&gt;. Also you can specify '-' instead of key
+## file path or data file to read the data from stdin.
+## Example:
+## $ (awk 'BEGIN {while (c++&lt;256) printf "a"}' | \
+##        echo -n AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHH) | \
+##     mmc rpmb write-block /dev/mmcblk0rpmb 0x02 - -
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgefba0f1" class="outline-3">
+<h3 id="orgefba0f1"><span class="section-number-3">4.3.</span> General Purpose Parition(GPP)</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+<code>GPP</code> 分区主要用于存储系统和应用数据。在很多使用 <code>eMMC</code> 的产品中, <code>GPP</code> 分区没有被启用，
+因为它在功能上与 <code>UDA</code> 类似，产品上直接使用 <code>UDA</code> 就可以满足需求。 <code>eMMC</code> 最多可以支持
+<code>4</code> 个 <code>GPP</code> 分区，每个 <code>GPP</code> 的大小可以单独配置。配置完成后每个分区的起始地址都是 <code>0x0</code> ，
+<code>eMMC</code> 标准中，为 <code>GPP</code> 定义了两类属性, <code>Enhanced attribute</code> 和 <code>Extended attribute~。每
+   个 ~GPP</code> 可以设定两类中的一种，不可以同时设定多个属性。
+</p>
+
+<ol class="org-ol">
+<li><code>Enhanced attribute</code>
+在 <code>eMMC</code> 标准中没有定义设置该属性的行为，由芯片厂商定义。
+<ul class="org-ul">
+<li><code>Default</code>: 未设定</li>
+<li><code>Enhanced storage media</code>: 提高该分区的读写性能、寿命以及稳定性</li>
+</ul></li>
+
+<li><code>Extended attribute</code>
+在 <code>eMMC</code> 标准中没有定义设置该属性的行为，由芯片厂商定义。
+<ul class="org-ul">
+<li><code>Default</code>: 未设定</li>
+<li><code>System code</code>: 主要用于存放操作系统类的、很少进行擦写更新的分区</li>
+<li><code>Non-Persistent</code>: 主要用于存储临时的数据，例如 <code>tmp</code>, <code>swap</code> 等分区</li>
+</ul></li>
+</ol>
+</div>
+<div id="outline-container-org3f08ecf" class="outline-4">
+<h4 id="org3f08ecf"><span class="section-number-4">4.3.1.</span> 创建 GPP 分区</h4>
+<div class="outline-text-4" id="text-4-3-1">
+<div class="org-src-container">
+<pre class="src src-bash"># Create GPP parition
+mmc gp create &lt;-y|-n|-c&gt; &lt;length KiB&gt; &lt;partition&gt; &lt;enh_attr&gt; &lt;ext_attr&gt; &lt;device&gt;
+## Create general purpose partition for the &lt;device&gt;.
+## Dry-run only unless -y or -c is passed.
+## Use -c if more partitioning settings are still to come.
+## NOTE!  This is a one-time programmable (unreversible) change.
+## To set enhanced attribute to general partition being created set
+##  &lt;enh_attr&gt; to 1 else set it to 0.
+## To set extended attribute to general partition
+##  set &lt;ext_attr&gt; to 1,2 else set it to 
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgcccec5b" class="outline-3">
+<h3 id="orgcccec5b"><span class="section-number-3">4.4.</span> User Data Area(UDA) Parition</h3>
+<div class="outline-text-3" id="text-4-4">
+<p>
+普通用户分区
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf8a48b9" class="outline-2">
+<h2 id="orgf8a48b9"><span class="section-number-2">5.</span> 参考文档</h2>
+<div class="outline-text-2" id="text-5">
+<ul class="org-ul">
+<li><a href="https://www.slideshare.net/slideshow/emmc-embedded-multimedia-card-overview/85666357?from_search=0">eMMC Embedded Multimedia Card Overview</a></li>
+
+<li><a href="https://www.jedec.org/standards-documents/technology-focus-areas/flash-memory-ssds-ufs-emmc/e-mmc">JEDEC eMMC standard</a></li>
+
+<li><a href="https://www.farnell.com/datasheets/4159922.pdf">eMMC 5.1 Specification(Not All)</a></li>
+
+<li><a href="https://yourcmc.ru/wiki/images/5/55/EMMC_JESD84-A441.pdf">eMMC A441 standard</a></li>
+
+<li><a href="https://blog.csdn.net/swanghn/article/details/112643632">eMMC 寄存器(eMMC5.1)</a></li>
+
+<li><a href="https://xxxdk.github.io/xxx/2020/10/SD%E5%8D%A1%E7%9B%B8%E5%85%B3%E5%AF%84%E5%AD%98%E5%99%A8%E7%AE%80%E4%BB%8B/">SD卡相关寄存器简介</a></li>
+
+<li><a href="https://carlyleliu.github.io/Embedded/RPMB/index.html">RPMB 简介</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: taocheng</p>
+<p class="date">Created: 2025-11-12 Wed 11:00</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

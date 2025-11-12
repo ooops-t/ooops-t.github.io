@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-11-12 Wed 10:59 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lrm;</title>
+<meta name="author" content="hcfa" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgdb8932a">1. 蓝牙模块 (AIC8800) 驱动移植及使用</a>
+<ul>
+<li><a href="#org01343ea">1.1. 驱动移植</a>
+<ul>
+<li><a href="#orgba9367f">1.1.1. 下载</a></li>
+<li><a href="#orgb4b16cc">1.1.2. 编译</a></li>
+<li><a href="#org06afb4b">1.1.3. 依赖的内核配置</a></li>
+<li><a href="#orgfd01c01">1.1.4. 加载驱动</a></li>
+</ul>
+</li>
+<li><a href="#orgd7ed960">1.2. 使用</a>
+<ul>
+<li><a href="#orgc0220da">1.2.1. WiFi</a></li>
+<li><a href="#orgd4efe4a">1.2.2. BT</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgdb8932a" class="outline-2">
+<h2 id="orgdb8932a"><span class="section-number-2">1.</span> 蓝牙模块 (AIC8800) 驱动移植及使用</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org01343ea" class="outline-3">
+<h3 id="org01343ea"><span class="section-number-3">1.1.</span> 驱动移植</h3>
+<div class="outline-text-3" id="text-1-1">
+</div>
+<div id="outline-container-orgba9367f" class="outline-4">
+<h4 id="orgba9367f"><span class="section-number-4">1.1.1.</span> 下载</h4>
+<div class="outline-text-4" id="text-1-1-1">
+<p>
+下载地址: <a href="https://github.com/radxa-pkg/aic8800">AIC8800 linux driver</a>
+</p>
+</div>
+</div>
+<div id="outline-container-orgb4b16cc" class="outline-4">
+<h4 id="orgb4b16cc"><span class="section-number-4">1.1.2.</span> 编译</h4>
+<div class="outline-text-4" id="text-1-1-2">
+<div class="org-src-container">
+<pre class="src src-bash">export CONFIG_AIC_FW_PATH=/lib/firmware/aic8800D80
+make -C src/SDIO/driver_fw/driver/aic8800 # 如果需要编译其他接口的驱动, 使用其他的接口目录即可.
+cp -arpf src/SDIO/driver_fw/fw/aic8800D80 /lib/firmware/ # 拷贝固件
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org06afb4b" class="outline-4">
+<h4 id="org06afb4b"><span class="section-number-4">1.1.3.</span> 依赖的内核配置</h4>
+<div class="outline-text-4" id="text-1-1-3">
+<div class="org-src-container">
+<pre class="src src-bash">CONFIG_NET=y
+CONFIG_WIRELESS=y
+CONFIG_CFG80211=y
+CONFIG_BT=y # Bluetooth
+CONFIG_BT_HCIUART=y # usart interface for BT.
+CONFIG_BT_HCIUART_H4=y
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgfd01c01" class="outline-4">
+<h4 id="orgfd01c01"><span class="section-number-4">1.1.4.</span> 加载驱动</h4>
+<div class="outline-text-4" id="text-1-1-4">
+<div class="org-src-container">
+<pre class="src src-bash">modprobe aic8800_fdrv
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd7ed960" class="outline-3">
+<h3 id="orgd7ed960"><span class="section-number-3">1.2.</span> 使用</h3>
+<div class="outline-text-3" id="text-1-2">
+</div>
+<div id="outline-container-orgc0220da" class="outline-4">
+<h4 id="orgc0220da"><span class="section-number-4">1.2.1.</span> WiFi</h4>
+<div class="outline-text-4" id="text-1-2-1">
+</div>
+<ol class="org-ol">
+<li><a id="orgd00450d"></a>准备配置文件 <b>/ect/wpa<sub>supplicant</sub></b><br />
+<div class="outline-text-5" id="text-1-2-1-1">
+<div class="org-src-container">
+<pre class="src src-bash">ctrl_interface=/var/run/wpa_supplicant
+update_config=1
+
+network={
+  key_mgmt=WPA-PSK
+}
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org22dd792"></a>连接 WiFi<br />
+<div class="outline-text-5" id="text-1-2-1-2">
+<div class="org-src-container">
+<pre class="src src-bash">wpa_supplicant -B -i &lt;wifi网卡名&gt; -c /etc/wpa_supplicant.conf
+wpa_cli scan # scan wifi
+wpa_cli scan_result # show results
+
+wpa_cli  #进入交互界面
+# wpa_cli v2.10
+# Copyright (c) 2004-2022, Jouni Malinen &lt;j@w1.fi&gt; and contributors
+# 
+# This software may be distributed under the terms of the BSD license.
+# See README for more details.
+# 
+# 
+# Selected interface 'wlan0'
+# 
+# Interactive mode
+# 
+# &gt; add_network                              #添加一个网络
+# 1
+# &gt; set_network 1 ssid "&lt;需要连接的Wifi名称&gt;"  #设置wifi的ssid
+# ok
+# &gt; set_network 1 psk "&lt;所连接wifi的密码&gt;"     #设置wifi密码  注意：wifi密码仅支持WPA加密方式
+# ok 
+# &gt; enable_network 1                         #尝试连接wifi 1
+# ok
+# &gt; save_config                              #保存设置
+# ok
+# &gt; quit
+
+udhcpc -i wlan0                         #给无线网卡wlan0分配ip地址
+# udhcpc: started, v1.35.0
+# udhcpc: broadcasting discover
+# udhcpc: broadcasting select for 192.168.1.100, server 192.168.1.1
+# udhcpc: lease of 192.168.1.100 obtained from 192.168.1.1, lease time 7200
+# deleting routers
+# adding dns 172.19.62.11
+# adding dns 172.19.62.12
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-orgd4efe4a" class="outline-4">
+<h4 id="orgd4efe4a"><span class="section-number-4">1.2.2.</span> BT</h4>
+<div class="outline-text-4" id="text-1-2-2">
+</div>
+<ol class="org-ol">
+<li><a id="orge6f76e0"></a>探测蓝牙设备<br />
+<div class="outline-text-5" id="text-1-2-2-1">
+<div class="org-src-container">
+<pre class="src src-bash">/usr/bin/hciattach -s 1500000 /dev/ttyAS1 any 1500000 flow nosleep
+hciconfig -a # 查看设备信息
+# hci0:   Type: Primary  Bus: UART
+#         BD Address: 78:22:88:E9:A5:40  ACL MTU: 1021:9  SCO MTU: 255:4
+#         UP RUNNING PSCAN 
+#         RX bytes:59012 acl:8 sco:0 events:1544 errors:0
+#         TX bytes:1561 acl:9 sco:0 commands:106 errors:0
+#         Features: 0xbf 0x2e 0x4d 0xfe 0xd8 0x3f 0x7b 0x87
+#         Packet type: DM1 DM3 DM5 DH1 DH3 DH5 HV1 HV3 
+#         Link policy: RSWITCH SNIFF 
+#         Link mode: PERIPHERAL ACCEPT 
+#         Name: 'BlueZ 5.72'
+#         Class: 0x000000
+#         Service Classes: Unspecified
+#         Device Class: Miscellaneous, 
+#         HCI Version: 5.4 (0xd)  Revision: 0xb
+#         LMP Version: 5.4 (0xd)  Subversion: 0xb
+#         Manufacturer: not assigned (2875)
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org5652195"></a>蓝牙设备操作<br />
+<ol class="org-ol">
+<li><a id="org7515812"></a>启动 <b>bluetoothd</b> 服务<br />
+<div class="outline-text-6" id="text-1-2-2-2-1">
+<div class="org-src-container">
+<pre class="src src-bash">/usr/libexec/bluetooth/bluetoothd -n &amp;
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org88f8e2c"></a>进入 <b>bluetoolthctl</b> 操作界面进行相关操作<br />
+<div class="outline-text-6" id="text-1-2-2-2-2">
+<div class="org-src-container">
+<pre class="src src-bash">bluetoothctl
+# hci0 new_settings: powered connectable bondable ssp br/edr le secure-conn 
+# Agent registered
+# [CHG] Controller 78:22:88:E9:A5:40 Pairable: yes
+# [bluetooth]# power on # 开启电源
+# [bluetooth]# scan on # 扫描设备
+# [bluetooth]# scan off # 停止扫描
+# [bluetooth]# discoverable on # 进入可被发现模式
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: hcfa</p>
+<p class="date">Created: 2025-11-12 Wed 10:59</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
