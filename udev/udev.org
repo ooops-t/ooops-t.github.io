@@ -1,0 +1,201 @@
+#+TITLE: udev
+#+AUTHOR: taocheng
+
+* udev 简介
+
+udev 机制是 Linux kernel 的设备管理机制。当内核检测到设备的插拔后，会发送事件给用户态的 udevd 进程。
+用户态 udevd 进程根据事件信息匹配不同规则从而进行不同的处理逻辑。udev 可提供所需的基础架构来动态维护
+/dev 目录中的设备节点文件和符号链接。udev 规则提供了将外部工具插入内核事件处理的方式。因而，您可以通
+过添加在内核设备处理过程中执行的特定脚本，来自定义 udev 设备处理方式，或者可以在设备处理期间请求并导入
+其他数据进行评估。
+
+
+* udev 关键特性
+
+- *规则文件*: udev 使用一组规则文件来定义设备的命名、权限、所有权和其他属性。这些规则文件通常位于 /etc/udev/rules.d/
+  和 /lib/udev/rules.d/ 目录中。规则文件的文件名以数字开头，数字越小，优先级越高。udev 会按照文件名的
+   字母顺序处理这些文件。
+
+
+- *事件*: 当设备连接或断开时，内核会生成一个事件。udev 监听这些事件，并根据规则文件执行相应的操作。事件
+   包括设备的添加、删除、更改等。
+
+
+- *设备节点*: udev 根据规则文件为设备创建设备节点 (device node), 通常位于 /dev/ 目录下。设备节点是用户
+   空间程序与设备驱动程序进行通信的接口。
+
+
+- *规则匹配*: udev 规则文件中的规则可以根据设备的属性（如设备类型、制造商、型号等）进行匹配。这使得 udev
+   能够为不同类型的设备进行特定的操作。
+
+
+- *规则动作*: udev 规则文件中规则可以执行各种动作，如设置设备节点权限、所有权、创建符号链接、运行脚本等。
+   这使得 udev 能够根据设备的特性自动配置设备。
+
+
+* 默认规则
+
+** block 设备进行 watch (60-block.rules)
+
+#+begin_src bash
+  # watch metadata changes, caused by tools closing the device node which was opened for writing
+  ACTION!="remove", SUBSYSTEM=="block", \
+    KERNEL=="loop*|mmcblk*[0-9]|msblk*[0-9]|mspblk*[0-9]|nvme*|sd*|vd*|xvd*|bcache*|cciss*|dasd*|ubd*|ubi*|scm*|pmem*|nbd*|zd*", \
+    OPTIONS+="watch"
+#+end_src
+
+当 ACTION 不为 remove 时，对于 loop、mmcblk等设备来说，将其加入 watch。watch 相关功能见后面详解。
+
+
+** block 设备进行软连接 (60-persistent-storage.rules)
+#+begin_src bash
+  # persistent storage links: /dev/disk/{by-id,by-uuid,by-label,by-path}
+
+  ACTION=="remove", GOTO="persistent_storage_end"
+  ENV{UDEV_DISABLE_PERSISTENT_STORAGE_RULES_FLAG}=="1", GOTO="persistent_storage_end"
+
+  SUBSYSTEM!="block|ubi", GOTO="persistent_storage_end"
+  KERNEL!="loop*|mmcblk*[0-9]|msblk*[0-9]|mspblk*[0-9]|nvme*|sd*|sr*|vd*|xvd*|bcache*|cciss*|dasd*|ubd*|ubi*|scm*|pmem*|nbd*|zd*", GOTO="persistent_storage_end"
+
+  # ignore partitions that span the entire disk
+  TEST=="whole_disk", GOTO="persistent_storage_end"
+
+  ENV{DEVTYPE}=="partition", \
+    IMPORT{parent}="ID_[!F]*", IMPORT{parent}="ID_", \
+    IMPORT{parent}="ID_F[!S]*", IMPORT{parent}="ID_F", \
+    IMPORT{parent}="ID_FS[!_]*", IMPORT{parent}="ID_FS"
+
+  # Run ata_id on non-removable USB Mass Storage (SATA/PATA disks in enclosures)
+  KERNEL=="sd*[!0-9]|sr*", ENV{ID_SERIAL}!="?*", ATTR{removable}=="0", SUBSYSTEMS=="usb", IMPORT{program}="ata_id --export $devnode"
+
+  # Fall back usb_id for USB devices
+  KERNEL=="sd*[!0-9]|sr*", ENV{ID_SERIAL}!="?*", SUBSYSTEMS=="usb", IMPORT{builtin}="usb_id"
+
+  # SCSI devices
+  KERNEL=="sd*[!0-9]|sr*", ENV{ID_SERIAL}!="?*", IMPORT{program}="scsi_id --export --whitelisted -d $devnode", ENV{ID_BUS}="scsi"
+  KERNEL=="cciss*", ENV{DEVTYPE}=="disk", ENV{ID_SERIAL}!="?*", IMPORT{program}="scsi_id --export --whitelisted -d $devnode", ENV{ID_BUS}="cciss"
+  KERNEL=="sd*|sr*|cciss*", ENV{DEVTYPE}=="disk", ENV{ID_SERIAL}=="?*", SYMLINK+="disk/by-id/$env{ID_BUS}-$env{ID_SERIAL}"
+  KERNEL=="sd*|cciss*", ENV{DEVTYPE}=="partition", ENV{ID_SERIAL}=="?*", SYMLINK+="disk/by-id/$env{ID_BUS}-$env{ID_SERIAL}-part%n"
+
+  # MMC
+  KERNEL=="mmcblk[0-9]", SUBSYSTEMS=="mmc", ATTRS{serial}=="?*", ENV{ID_SERIAL}="$attr{serial}"
+  KERNEL=="mmcblk[0-9]", SUBSYSTEMS=="mmc", ATTRS{name}=="?*", ENV{ID_NAME}="$attr{name}"
+  KERNEL=="mmcblk[0-9]", ENV{ID_NAME}=="?*", ENV{ID_SERIAL}=="?*", SYMLINK+="disk/by-id/mmc-$env{ID_NAME}_$env{ID_SERIAL}"
+  KERNEL=="mmcblk[0-9]p[0-9]*", ENV{ID_NAME}=="?*", ENV{ID_SERIAL}=="?*", SYMLINK+="disk/by-id/mmc-$env{ID_NAME}_$env{ID_SERIAL}-part%n"
+
+  # by-path
+  ENV{DEVTYPE}=="disk", DEVPATH!="*/virtual/*", IMPORT{builtin}="path_id"
+  KERNEL=="mmcblk[0-9]boot[0-9]", ENV{DEVTYPE}=="disk", ENV{ID_PATH}=="?*", SYMLINK+="disk/by-path/$env{ID_PATH}-boot%n"
+  KERNEL!="mmcblk[0-9]boot[0-9]", ENV{DEVTYPE}=="disk", ENV{ID_PATH}=="?*", SYMLINK+="disk/by-path/$env{ID_PATH}"
+  ENV{DEVTYPE}=="partition", ENV{ID_PATH}=="?*", SYMLINK+="disk/by-path/$env{ID_PATH}-part%n"
+  # compatible links for ATA devices
+  KERNEL!="mmcblk[0-9]boot[0-9]", ENV{DEVTYPE}=="disk", ENV{ID_PATH_ATA_COMPAT}=="?*", SYMLINK+="disk/by-path/$env{ID_PATH_ATA_COMPAT}"
+  ENV{DEVTYPE}=="partition", ENV{ID_PATH_ATA_COMPAT}=="?*", SYMLINK+="disk/by-path/$env{ID_PATH_ATA_COMPAT}-part%n"
+
+  # probe filesystem metadata of disks
+  KERNEL!="sr*|mmcblk[0-9]boot[0-9]", IMPORT{builtin}="blkid"
+
+  # by-label/by-uuid links (filesystem metadata)
+  ENV{ID_FS_USAGE}=="filesystem|other|crypto", ENV{ID_FS_UUID_ENC}=="?*", SYMLINK+="disk/by-uuid/$env{ID_FS_UUID_ENC}"
+  ENV{ID_FS_USAGE}=="filesystem|other|crypto", ENV{ID_FS_LABEL_ENC}=="?*", SYMLINK+="disk/by-label/$env{ID_FS_LABEL_ENC}"
+
+  # by-id (World Wide Name)
+  ENV{DEVTYPE}=="disk", ENV{ID_WWN_WITH_EXTENSION}=="?*", SYMLINK+="disk/by-id/wwn-$env{ID_WWN_WITH_EXTENSION}"
+  ENV{DEVTYPE}=="partition", ENV{ID_WWN_WITH_EXTENSION}=="?*", SYMLINK+="disk/by-id/wwn-$env{ID_WWN_WITH_EXTENSION}-part%n"
+
+  # by-partlabel/by-partuuid links (partition metadata)
+  ENV{ID_PART_ENTRY_UUID}=="?*", SYMLINK+="disk/by-partuuid/$env{ID_PART_ENTRY_UUID}"
+  ENV{ID_PART_ENTRY_SCHEME}=="gpt", ENV{ID_PART_ENTRY_NAME}=="?*", SYMLINK+="disk/by-partlabel/$env{ID_PART_ENTRY_NAME}"
+
+  # by-diskseq link (if an app is told to open a path like this, they may parse
+  # the diskseq number from the path, then issue BLKGETDISKSEQ to verify they really got
+  # the right device, to access specific disks in a race-free fashion)
+  ENV{DISKSEQ}=="?*", ENV{DEVTYPE}!="partition", SYMLINK+="disk/by-diskseq/$env{DISKSEQ}"
+
+  LABEL="persistent_storage_end"
+#+end_src
+
+
+* 实现原理
+
+** udevadm (udev ctrl)
+
+使用本地 socket 通信，udevadm 相关工具与 udevd 守护进程通信
+#+begin_src c
+  socket(AF_LOCAL, SOCK_SEQPACKET|SOCK_NONBLOCK|SOCK_CLOEXEC, 0);
+#+end_src
+
+
+** netlink (udev monitor)
+
+使用 netlink socket 通信，内核与主线程通信
+#+begin_src c
+  socket(PF_NETLINK, SOCK_RAW|SOCK_CLOEXEC|SOCK_NONBLOCK, NETLINK_KOBJECT_UEVENT);
+#+end_src
+
+
+** inotify (udev watch)
+
+使用 inotify 通信，监控规则文件变化和指定设备的变化
+#+begin_src c
+  inotify_init1(IN_CLOEXEC);
+  /* watch rules.d paths for changes */
+  inotify_add_watch(fd_inotify, UDEV_RULES_DIR, IN_DELETE | IN_MOVE | IN_CLOSE_WRITE);
+  inotify_add_watch(fd_inotify, UDEV_CONF_DIR "/rules.d", IN_DELETE | IN_MOVE | IN_CLOSE_WRITE);
+  inotify_add_watch(fd_inotify, UDEV_ROOT_RUN "/udev/rules.d", IN_DELETE | IN_MOVE | IN_CLOSE_WRITE);
+  /* watch dev */
+  inotify_add_watch(inotify_fd, udev_device_get_devnode(dev), IN_CLOSE_WRITE);
+#+end_src
+
+
+** signal
+
+使用 signal 通信，用于控制工作线程
+#+begin_src c
+  /* block and listen to all signals on signalfd */
+  sigfillset(&mask);
+  sigprocmask(SIG_SETMASK, &mask, &sigmask_orig);
+  fd_signal = signalfd(-1, &mask, SFD_NONBLOCK|SFD_CLOEXEC);
+#+end_src
+
+
+** worker watch
+
+使用 uname socket 通信, 用于每个工作线程与主线程之间通信
+#+begin_src c
+  /* unnamed socket from workers to the main daemon */
+  socketpair(AF_LOCAL, SOCK_DGRAM|SOCK_CLOEXEC, 0, worker_watch);
+  fd_worker = worker_watch[READ_END];
+  setsockopt(fd_worker, SOL_SOCKET, SO_PASSCRED, &one, sizeof(one));
+#+end_src
+
+
+* 常用命令
+
+#+begin_src sh
+  udevadm control --reload # 重新加载规则
+  udevadm control --log_priority=<level number> # 更改守护进程的日志等级
+  udevadm monitor # 直观显示驱动程序核心事件以及 udev 事件进程的时间
+  udevadm monitor --env # 显示完整的事件环境
+  udevadm info <device path> # 查看设备的属性信息
+#+end_src
+
+
+* 参考链接
+
+1. [[https://www.jinbuguo.com/systemd/udev.html][udev 中文手册[金步国]​]]
+
+
+2. [[https://docs.opencloudos.org/OCS/AdministratorGuide/System_Service_Management/Udev_guide/][udev 机制与使用]]
+
+
+3. [[https://documentation.suse.com/zh-cn/sles/15-SP6/html/SLES-all/cha-udev.html][使用 udev 进行动态内核设备管理]]
+
+
+4. [[https://just4coding.com/2022/11/30/udev/][udev机制简介]]
+
+
+5. [[https://man.archlinux.org/man/udev.7][udev - Dynamic device management]]
+
+
+6. [[https://www.reactivated.net/writing_udev_rules.html#syntax][Writing udev rules]]

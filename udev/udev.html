@@ -1,0 +1,1516 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2026-01-30 Fri 13:40 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>udev</title>
+<meta name="author" content="taocheng" />
+<meta name="generator" content="Org Mode" />
+<style type='text/css'>
+<!--/*--><![CDATA[/*><!--*/
+/* nice-org-html.css
+;;==============================================================================
+;; Copyright (C) 2024, Ewan Townshend
+
+;; Author: Ewan Townshend
+;; URL: https://github.com/ewantown/nice-org-html
+;; Version: 1.2
+
+;;==============================================================================
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+;; This file is not part of emacs.
+
+;;==============================================================================
+*/
+
+/* basic layout ***************************************************************/
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+html {
+    font-family: Sans;
+    line-height: 1.3;
+    font-size: calc(15px + 0.390625vw);
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    background: #999; /* overwritten with theme --bg */
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family:
+	-apple-system,
+	BlinkMacSystemFont,
+	segoe ui,
+	Roboto,
+	Oxygen,
+	Ubuntu,
+	Cantarell,
+	open sans,
+	helvetica neue,
+	sans-serif,
+	system-ui
+}
+
+#preamble,
+#postamble {
+    width: 100%;
+}
+
+#content {
+    width: 80%;
+    max-width: 80ch;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    flex: 1;
+}
+
+/* custom facing **************************************************************/
+/* The variable values are injected by CSS pre-processing in et-org-html.el */
+:root {
+    --bc-tb: #383a42;
+    --bc-block: initial;
+    --clr: #383a42;
+    --clr-tb-hd: initial;
+    --clr-code: initial;
+    --bg: #fafafa;
+    --bg-code: #f0f0f1;
+    --bg-tb-hd: #f0f0f1;
+    --bg-block: initial;
+    --clr-link: #008B8B;
+    --clr-title: #383a42;
+    --clr-todo: #50a14f;
+    --bg-todo: initial;
+    --clr-done: #a0a1a7;
+    --bg-done: initial;
+    --ts-clr: #a626a4;
+    --mg: 20px;
+    --w-toc: 300px;
+    --bg-keyword: initial;
+    --clr-keyword: #a626a4;
+    --bg-constant: initial;
+    --clr-constant: #008B8B;
+    --bg-comment: initial;
+    --clr-comment: #a0a1a7;
+    --bg-comment-delimiter: initial;
+    --clr-comment-delimiter: initial;
+    --bg-function: initial;
+    --clr-function: #0184bc;
+    --bg-variable: initial;
+    --clr-variable: #8B4513;
+    --bg-preprocessor: initial;
+    --clr-preprocessor: initial;
+    --bg-doc: initial;
+    --clr-doc: initial;
+    --bg-builtin: initial;
+    --clr-builtin: #e44649;
+    --bg-string: initial;
+    --clr-string: #50a14f;
+    --clr-note: #0969da;
+    --clr-tip: #1a7f37;
+    --clr-important: #8250df;
+    --clr-warning: #9a6700;
+    --clr-caution: #cf222e;
+}
+
+body[data-mode='light'] {
+    background: var(--bg);
+    color: var(--clr);
+}
+
+body[data-mode='dark'] {
+    background: var(--bg);
+    color: var(--clr);
+    --bc-tb: #FF0000;
+    --bc-block: initial;
+    --clr: #F5F5F5;
+    --clr-code: initial;
+    --clr-tb-hd: initial;
+    --bg: #333333;
+    --bg-tb-hd: #4D4D4D;
+    --bg-code: #4D4D4D;
+    --bg-block: initial;
+    --clr-link: #1E90FF;
+    --clr-title: #F5F5F5;
+    --clr-todo: #FFA07A;
+    --bg-todo: initial;
+    --clr-done: #CD853F;
+    --bg-done: initial;
+    --ts-clr: #20B2AA;
+    --mg: 20px;
+    --w-toc: 300px;
+    --bg-keyword: initial;
+    --clr-keyword: #20B2AA;
+    --bg-constant: initial;
+    --clr-constant: #1E90FF;
+    --bg-comment: initial;
+    --clr-comment: #CD853F;
+    --bg-comment-delimiter: initial;
+    --clr-comment-delimiter: initial;
+    --bg-function: initial;
+    --clr-function: #00FF7F;
+    --bg-variable: initial;
+    --clr-variable: #9ACD32;
+    --bg-preprocessor: initial;
+    --clr-preprocessor: #6495ED;
+    --bg-doc: initial;
+    --clr-doc: #CD5C5C;
+    --bg-builtin: initial;
+    --clr-builtin: #76EE00;
+    --bg-string: initial;
+    --clr-string: #FFA07A;
+    --clr-note: #0969da;
+    --clr-tip: #1a7f37;
+    --clr-important: #8250df;
+    --clr-warning: #9a6700;
+    --clr-caution: #cf222e;
+}
+
+/* exceptions for badly rendering themes **************************************/
+body[data-theme='leuven'],
+body[data-theme='leuven-dark'] {
+    --bg-code: var(--bg-block);
+}
+
+/* ootb page layout ***********************************************************/
+#view-controls {
+    position: sticky;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: var(--bg);
+    color: var(--clr-code);
+    height: 2.5rem;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+    z-index: 100;
+    border-radius: 5px; /* Rounded corners */
+}
+#toggle-mode {
+    position: absolute;
+    right: 5%;
+    display: block;
+    text-align: center;
+    font-size: 1.5rem;
+    background: var(--bg);
+    color: var(--clr-code);
+    padding: 0.25rem 0;
+}
+#goto-top {
+    display: none;
+}
+#goto-top[data-show="true"] {
+    position: relative;
+    display: block;
+    text-align: center;
+    font-size: 1rem;
+    background: var(--bg);
+    color: var(--clr-code);
+    padding: 0.25rem 0;
+}
+#toggle-toc {
+    display: none;
+}
+#toggle-toc[data-show="true"] {
+    position: absolute;
+    left: 5%;
+    display: block;
+    text-align: center;
+    font-size: 1.5rem;
+    background: var(--bg);
+    color: var(--clr-code);
+    padding: 0.25rem 0;
+}
+
+#toggle-toc:hover,
+#goto-top:hover,
+#toggle-mode:hover {
+    cursor: pointer;
+}
+
+#table-of-contents {
+    display: none;
+}
+#table-of-contents[data-show="true"] {
+    width: 80%;
+    max-width: 80rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    background: var(--bg);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+#table-of-contents::-webkit-scrollbar {
+    display: none;
+}
+
+body[data-toc="true"] #content * {
+    display: none;
+}
+body[data-toc="true"] #content #table-of-contents,
+body[data-toc="true"] #content #table-of-contents * {
+    display: block;
+}
+
+
+/* misc elements **************************************************************/
+
+hr {
+    height: 0;
+    color: inherit;
+}
+
+b,
+strong {
+    font-weight: bolder;
+}
+
+code,
+kbd,
+samp,
+pre {
+    font-family:
+	Menlo,
+	ui-monospace,
+	SFMono-Regular,
+	Consolas,
+	'Liberation Mono',
+	monospace;
+}
+
+small {
+    font-size: 80%;
+}
+
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+sup {
+    top: -0.5em;
+}
+
+table {
+    text-indent: 0;
+    border-color: inherit;
+}
+
+summary {
+    display: list-item;
+}
+
+h1 {
+    color: var(--clr-title);
+    text-align: center;
+}
+h2 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+code {
+    color: var(--clr-code);
+    background: var(--bg-code);
+    border-radius: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+pre::-webkit-scrollbar {
+    display: none;
+}
+
+.todo {
+    color: var(--clr-todo);
+    background: var(--bg-todo);
+}
+
+.done {
+    color: var(--clr-done);
+    background: var(--bg-done);
+}
+
+.timestamp-wrapper {
+    font-size: 0.8rem;
+    color: var(--clr-ts);
+}
+
+table {
+    width: 100%;
+    border: 2px solid var(--bc-tb);
+}
+
+thead {
+    color: var(--clr-tb-hd);
+    background: var(--bg-tb-hd);
+}
+
+td, th {
+    border: thin solid var(--bc-tb);
+}
+
+li {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+#text-table-of-contents li a:before {
+    content: "• "
+}
+
+a {
+    text-decoration: none;
+    color: var(--clr-link);
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.MathJax_Display {
+    font-size: 1.25em;
+}
+
+img {
+    max-width: 100%;
+}
+
+pre {
+    padding: 1rem;
+    border: 1px solid var(--bc-block);
+    border-radius: 0.5rem;
+    background: var(--bg-block);
+    font-size: 0.9rem;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: thin;
+}
+
+.org-src-wrapper {
+    position: relative;
+    border: 1px solid var(--bc-block);
+    border-radius: 0.5rem;
+    background: var(--bg-code);
+}
+
+.org-src-bar {
+    position: relative;
+    top: 0rem;
+    width: 100%;
+    background: var(--bg-code);
+    border-radius: 0.5rem;
+    text-align: right;
+    min-height: 1rem;
+}
+
+.org-src-wrapper .org-src-container {
+    position: relative;
+    border: none;
+    border-radius: 0.5rem;
+    background: var(--bg-code);
+    z-index: 0;
+}
+
+.org-src-wrapper .org-src-container pre.src {
+    border: none !important;
+    background: var(--bg-code) !important;
+    padding-top: 0rem;
+    padding-bottom: 0rem;
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+    padding-bottom: 1.6rem;
+}
+
+.org-src-wrapper .org-src-bar .srcLangLabel {
+    top: 0rem;
+    right: 1.6rem;
+    background-color: transparent;
+    color: var(--clr-doc);
+    border: none;
+    padding: 0.5rem;
+    padding-bottom: 0.3rem;
+    text-align: center;
+    text-decoration: none;
+    font-size: 0.8rem;
+    opacity: 0.5;
+    z-index: 1;
+    display: none;
+}
+
+.org-src-wrapper .org-src-bar .copyBtn {
+    top: 0rem;
+    right: 0.1rem;
+    background-color: transparent;
+    color: var(--clr-doc);
+    border: none;
+    padding: 0.5rem;
+    padding-right: 0.7rem;
+    padding-bottom: 0.3rem;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 0.8rem;
+    cursor: pointer;
+    opacity: 0.5;
+    z-index: 1;
+    transition: opacity 0.3s;
+}
+
+.org-src-wrapper .copyBtn:hover {
+    opacity: 1;
+}
+
+.org-src-wrapper .copyBtn i {
+    margin-right: 0.5rem;
+    padding: 0.5rem;
+}
+
+.admonition {
+    margin: 0.2rem;
+    color: inherit;
+    border-left: .25rem solid;
+}
+.admonition-title {
+    margin: 0 0 0.5rem 0.5rem;
+    padding: 0.5rem 0 0 0;
+    display: flex;
+    align-items: center;
+}
+.admonition-content > p {
+    margin: 0.5rem 0 0 0.5rem;
+    padding: 0 0 0.5rem 0;
+}
+
+.admonition.note {
+    border-left-color: var(--clr-note);
+}
+.admonition-title.note {
+    color: var(--clr-note);
+}
+.admonition-title.note:before {
+    content: '';
+    display: inline-block;
+    margin-right: 0.5rem;
+    width: 1rem;
+    height: 1rem;
+    background-color: var(--clr-note);
+    mask-size: cover;    
+    mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="false"><path class="admonition-icon-note" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>');    
+}
+.admonition-icon-note {
+    fill: var(--clr-note);
+}
+
+.admonition.tip {
+    border-left-color: var(--clr-tip);
+}
+.admonition-title.tip {
+    color: var(--clr-tip);
+}
+.admonition-title.tip:before {
+    content: '';
+    fill: var(--clr-tip);    
+    display: inline-block;
+    margin-right: 0.5rem;
+    width: 1rem;
+    height: 1rem;
+    background-color: var(--clr-tip);
+    mask-size: cover;
+    mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="false"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg>');    
+}
+
+.admonition.important {
+    border-left-color: var(--clr-important);
+}
+.admonition-title.important {
+    color: var(--clr-important);
+}
+.admonition-title.important:before {
+    content: '';
+    fill: var(--clr-important);    
+    display: inline-block;
+    margin-right: 0.5rem;
+    width: 1rem;
+    height: 1rem;
+    background-color: var(--clr-important);
+    mask-size: cover;
+    mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="false"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>');    
+}
+
+.admonition.warning {
+    border-left-color: var(--clr-warning);
+}
+.admonition-title.warning {
+    color: var(--clr-warning);
+}
+.admonition-title.warning:before {
+    content: '';
+    color: var(--clr-warning);    
+    display: inline-block;
+    margin-right: 0.5rem;
+    width: 1rem;
+    height: 1rem;
+    background-color: var(--clr-warning);
+    mask-size: cover;
+    mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="false"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>');
+}
+
+
+.admonition.caution {
+    border-left-color: var(--clr-caution);
+}
+.admonition-title.caution {
+    color: var(--clr-caution);
+}
+.admonition-title.caution:before {
+    content: '';
+    fill: var(--clr-caution);    
+    display: inline-block;
+    margin-right: 0.5rem;
+    width: 1rem;
+    height: 1rem;
+    background-color: var(--clr-caution);
+    mask-size: cover;
+    mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="false"><path d="M4.47.22A.749.749 0 0 1 5 0h6c.199 0 .389.079.53.22l4.25 4.25c.141.14.22.331.22.53v6a.749.749 0 0 1-.22.53l-4.25 4.25A.749.749 0 0 1 11 16H5a.749.749 0 0 1-.53-.22L.22 11.53A.749.749 0 0 1 0 11V5c0-.199.079-.389.22-.53Zm.84 1.28L1.5 5.31v5.38l3.81 3.81h5.38l3.81-3.81V5.31L10.69 1.5ZM8 4a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>');    
+}
+/* responsive layouts *********************************************************/
+
+@media only screen and (max-width: 768px) {
+    #toggle-toc[data-show='true'] {
+	padding-right: 5%;
+    }
+    #toggle-mode {
+	padding-left: 5%;
+    }
+    #content {
+	width: 90%;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    #view-controls {
+	padding-top: 1.5em;
+	padding-bottom: 1.5em;
+    }
+    #toggle-toc[data-show='true'] {
+	padding-right: 5%;
+    }
+    #toggle-mode {
+	padding-left: 5%;
+    }
+    #content {
+	width: 90%;
+    }
+}
+
+
+/* generated header and footer ************************************************/
+
+#generated-header,
+#generated-footer {
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    line-height: 1;
+}
+.generated header {
+    top: 0;
+    left: 0;
+}
+.generated footer {
+    bottom: 0;
+    left: 0;
+}
+.generated header a,
+.generated footer a {
+    display: inline;
+    color: var(--clr-title);
+    text-decoration: none;
+    transition: color .15s ease-in;
+}
+.generated header a:hover,
+.generated footer a:hover {
+    color: var(--clr-link);
+}
+
+.generated header nav {
+    position: relative;
+    margin-top: 1rem;
+    top: 0;
+    left: 0;
+}
+.generated footer nav {
+    position: relative;
+    bottom: 0;
+    left: 0;
+}
+
+.generated .separator {
+    display: block;
+    width: 111%;
+    margin-left: -5.5%;
+    max-width: 100vw;
+    height: 0.125rem;
+    background: var(--bg-code);
+}
+
+.generated a .nav-title,
+.generated a .nav-author {
+    display: inline;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding-right: 10rem;
+}
+
+.generated .nav-title {
+    letter-spacing: .075rem;
+    font-weight: 500;
+}
+
+.generated .nav-toggle {
+    display: none;
+}
+.generated .nav-button {
+    display: none;
+}
+.generated .nav-list {
+    overflow-y: hidden;
+    display: block;
+    float: right;
+    list-style: none;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.generated .nav-item {
+    position: relative;
+    float: left;
+    margin: 0;
+}
+.generated .nav-link {
+    position: relative;
+    float: right;
+    margin-left: 2rem;
+    margin-right: 0rem;
+}
+
+.generated .nav-toggle {
+    max-height: 0;
+    visibility: hidden;
+    overflow-y: hidden;
+}
+
+.generated header .separator {
+    margin-top: 1rem;
+    margin-bottom: 0;
+}
+
+.generated footer .separator {
+    margin-bottom: 1rem;
+    margin-top: 0;
+}
+
+.generated .menu-sep {
+    display: none;
+    max-height: 0;
+    overflow-y: hidden;
+    transition: max-height 0.2s ease;
+}
+
+.generated footer {
+    padding-bottom: 1rem;
+}
+
+.generated.compact footer {
+    padding-bottom: 0;
+}
+
+.generated.compact header .separator {
+    margin-top: 0;
+    margin-bottom:0;
+}
+.generated.compact footer .separator {
+    margin-bottom: 1rem;
+}
+
+.generated.compact .nav-toggle {
+    visibility: visible;
+}
+
+.generated.compact .nav-toggle + label span::before {
+    transition: all 0.2s ease-in;
+}
+.generated.compact .nav-toggle:checked + label span::before {
+    transform: translateX(0.04rem) translateY(-0.25rem) rotate(90deg);
+    transition: all 0.2s ease;
+}
+
+.generated.compact .menu-sep {
+    display: flex;
+    max-height: 0rem;
+}
+.generated.compact .nav-toggle:checked + label + .menu-sep {
+    display: block;
+    position: relative;
+    max-height: 1rem;
+    transition: max-height 0.2s ease;
+}
+
+.generated.compact .nav-list {
+    float: none !important;
+    position: relative;
+    display: block;
+    padding-left: 0;
+    padding-right: 0;
+    z-index: 5;
+    width: 100%;
+    height: auto;
+    max-height: 0;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    transition: max-height 0.2s ease;
+}
+.generated.compact .nav-toggle:checked + label ~ .nav-list {
+    display: block;
+    max-height: 100rem;
+    overflow-y: hidden;
+}
+.generated.compact header .nav-toggle:checked + label ~ .nav-list {
+    transition: max-height 0.2s ease;
+}
+
+.generated.compact .nav-button {
+    display: inline;
+    position: relative;
+    float: right;
+    font-size: 1rem;
+}
+.generated.compact .nav-button span::before {
+    display: inline-block;
+    content: '\2807';
+    font-size: 2rem;
+    transform: translateX(0.25rem) translateY(-0.5rem);
+}
+
+.generated.compact .nav-item {
+    float: none !important;
+    text-align: center !important;
+}
+.generated.compact .nav-link {
+    line-height: 2rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    float: none !important;
+}
+
+.generated.compact footer .separator.menu-sep {
+    margin-bottom: -1rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.collapsible:hover {
+    cursor: pointer;
+}
+
+.collapsible.collapsed::after {
+    display: inline-block;
+    content: '...';
+}
+/*]]>*/-->
+</style>
+</head>
+<body>
+<div id="preamble" class="status">
+<div id='view-controls'><div id='toggle-mode' title='Mode'>&#9788;</div><div id='goto-top' title='Top'>&#8963;</div><div id='toggle-toc' title='Contents'>&#9776;</div></div>
+</div>
+<div id="content" class="content">
+<h1 class="title">udev</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org4c828f4">1. udev 简介</a></li>
+<li><a href="#org5b86e3a">2. udev 关键特性</a></li>
+<li><a href="#org01fe937">3. 默认规则</a>
+<ul>
+<li><a href="#org35bb564">3.1. block 设备进行 watch (60-block.rules)</a></li>
+<li><a href="#orgfe230f0">3.2. block 设备进行软连接 (60-persistent-storage.rules)</a></li>
+</ul>
+</li>
+<li><a href="#org733538a">4. 实现原理</a>
+<ul>
+<li><a href="#org4704535">4.1. udevadm (udev ctrl)</a></li>
+<li><a href="#org100bb72">4.2. netlink (udev monitor)</a></li>
+<li><a href="#org316e32e">4.3. inotify (udev watch)</a></li>
+<li><a href="#orgf0d479d">4.4. signal</a></li>
+<li><a href="#orgc01b26e">4.5. worker watch</a></li>
+</ul>
+</li>
+<li><a href="#orgefb9339">5. 常用命令</a></li>
+<li><a href="#org4e7a9cc">6. 参考链接</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org4c828f4" class="outline-2">
+<h2 id="org4c828f4"><span class="section-number-2">1.</span> udev 简介</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+udev 机制是 Linux kernel 的设备管理机制。当内核检测到设备的插拔后，会发送事件给用户态的 udevd 进程。
+用户态 udevd 进程根据事件信息匹配不同规则从而进行不同的处理逻辑。udev 可提供所需的基础架构来动态维护
+/dev 目录中的设备节点文件和符号链接。udev 规则提供了将外部工具插入内核事件处理的方式。因而，您可以通
+过添加在内核设备处理过程中执行的特定脚本，来自定义 udev 设备处理方式，或者可以在设备处理期间请求并导入
+其他数据进行评估。
+</p>
+</div>
+</div>
+<div id="outline-container-org5b86e3a" class="outline-2">
+<h2 id="org5b86e3a"><span class="section-number-2">2.</span> udev 关键特性</h2>
+<div class="outline-text-2" id="text-2">
+<ul class="org-ul">
+<li><b>规则文件</b>: udev 使用一组规则文件来定义设备的命名、权限、所有权和其他属性。这些规则文件通常位于 <i>etc/udev/rules.d</i>
+和 <i>lib/udev/rules.d</i> 目录中。规则文件的文件名以数字开头，数字越小，优先级越高。udev 会按照文件名的
+ 字母顺序处理这些文件。</li>
+</ul>
+
+
+<ul class="org-ul">
+<li><b>事件</b>: 当设备连接或断开时，内核会生成一个事件。udev 监听这些事件，并根据规则文件执行相应的操作。事件
+包括设备的添加、删除、更改等。</li>
+</ul>
+
+
+<ul class="org-ul">
+<li><b>设备节点</b>: udev 根据规则文件为设备创建设备节点 (device node), 通常位于 <i>dev</i> 目录下。设备节点是用户
+空间程序与设备驱动程序进行通信的接口。</li>
+</ul>
+
+
+<ul class="org-ul">
+<li><b>规则匹配</b>: udev 规则文件中的规则可以根据设备的属性（如设备类型、制造商、型号等）进行匹配。这使得 udev
+能够为不同类型的设备进行特定的操作。</li>
+</ul>
+
+
+<ul class="org-ul">
+<li><b>规则动作</b>: udev 规则文件中规则可以执行各种动作，如设置设备节点权限、所有权、创建符号链接、运行脚本等。
+这使得 udev 能够根据设备的特性自动配置设备。</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org01fe937" class="outline-2">
+<h2 id="org01fe937"><span class="section-number-2">3.</span> 默认规则</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-org35bb564" class="outline-3">
+<h3 id="org35bb564"><span class="section-number-3">3.1.</span> block 设备进行 watch (60-block.rules)</h3>
+<div class="outline-text-3" id="text-3-1">
+<div class='org-src-wrapper'>
+<div class='org-src-bar'><span class='srcLangLabel'>BASH</span><button class='copyBtn' name=btn_bb03b0db3f944c7fab0a083d468ff785>&#10697;</button>
+<script type='text/javascript'>
+var copyBtnbtn_bb03b0db3f944c7fab0a083d468ff785=document.querySelector('button[name=btn_bb03b0db3f944c7fab0a083d468ff785]');
+copyBtnbtn_bb03b0db3f944c7fab0a083d468ff785.addEventListener('click', function(event) {
+let res = copyTextToClipboard(`# watch metadata changes, caused by tools closing the device node which was opened for writing\nACTION!=\"remove\", SUBSYSTEM==\"block\", \\\n  KERNEL==\"loop*|mmcblk*[0-9]|msblk*[0-9]|mspblk*[0-9]|nvme*|sd*|vd*|xvd*|bcache*|cciss*|dasd*|ubd*|ubi*|scm*|pmem*|nbd*|zd*\", \\\n  OPTIONS+=\"watch\"\n`);copyBtnbtn_bb03b0db3f944c7fab0a083d468ff785.innerHTML = res ? '&#10003;' : 'error';setTimeout(() => { copyBtnbtn_bb03b0db3f944c7fab0a083d468ff785.innerHTML = '&#10697;'}, 3000);
+});
+</script>
+</div><div class="org-src-container">
+<pre class="src src-bash"><span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"># </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">watch metadata changes, caused by tools closing the device node which was opened for writing
+</span>ACTION!=<span style="color: var(--clr-string); background-color: var(--bg-string);">"remove"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SUBSYSTEM</span>==<span style="color: var(--clr-string); background-color: var(--bg-string);">"block"</span>, <span style="color: #8b2252;">\</span>
+  <span style="color: var(--clr-variable); background-color: var(--bg-variable);">KERNEL</span>==<span style="color: var(--clr-string); background-color: var(--bg-string);">"loop*|mmcblk*[0-9]|msblk*[0-9]|mspblk*[0-9]|nvme*|sd*|vd*|xvd*|bcache*|cciss*|dasd*|ubd*|ubi*|scm*|pmem*|nbd*|zd*"</span>, <span style="color: #8b2252;">\</span>
+  <span style="color: var(--clr-variable); background-color: var(--bg-variable);">OPTIONS</span>+=<span style="color: var(--clr-string); background-color: var(--bg-string);">"watch"</span>
+</pre>
+</div></div>
+
+<p>
+当 ACTION 不为 remove 时，对于 loop、mmcblk等设备来说，将其加入 watch。watch 相关功能见后面详解。
+</p>
+</div>
+</div>
+<div id="outline-container-orgfe230f0" class="outline-3">
+<h3 id="orgfe230f0"><span class="section-number-3">3.2.</span> block 设备进行软连接 (60-persistent-storage.rules)</h3>
+<div class="outline-text-3" id="text-3-2">
+<div class='org-src-wrapper'>
+<div class='org-src-bar'><span class='srcLangLabel'>BASH</span><button class='copyBtn' name=btn_6fe449e6179c447bb82aa2bb7c52ea72>&#10697;</button>
+<script type='text/javascript'>
+var copyBtnbtn_6fe449e6179c447bb82aa2bb7c52ea72=document.querySelector('button[name=btn_6fe449e6179c447bb82aa2bb7c52ea72]');
+copyBtnbtn_6fe449e6179c447bb82aa2bb7c52ea72.addEventListener('click', function(event) {
+let res = copyTextToClipboard(`# persistent storage links: /dev/disk/{by-id,by-uuid,by-label,by-path}\n\nACTION==\"remove\", GOTO=\"persistent_storage_end\"\nENV{UDEV_DISABLE_PERSISTENT_STORAGE_RULES_FLAG}==\"1\", GOTO=\"persistent_storage_end\"\n\nSUBSYSTEM!=\"block|ubi\", GOTO=\"persistent_storage_end\"\nKERNEL!=\"loop*|mmcblk*[0-9]|msblk*[0-9]|mspblk*[0-9]|nvme*|sd*|sr*|vd*|xvd*|bcache*|cciss*|dasd*|ubd*|ubi*|scm*|pmem*|nbd*|zd*\", GOTO=\"persistent_storage_end\"\n\n# ignore partitions that span the entire disk\nTEST==\"whole_disk\", GOTO=\"persistent_storage_end\"\n\nENV{DEVTYPE}==\"partition\", \\\n  IMPORT{parent}=\"ID_[!F]*\", IMPORT{parent}=\"ID_\", \\\n  IMPORT{parent}=\"ID_F[!S]*\", IMPORT{parent}=\"ID_F\", \\\n  IMPORT{parent}=\"ID_FS[!_]*\", IMPORT{parent}=\"ID_FS\"\n\n# Run ata_id on non-removable USB Mass Storage (SATA/PATA disks in enclosures)\nKERNEL==\"sd*[!0-9]|sr*\", ENV{ID_SERIAL}!=\"?*\", ATTR{removable}==\"0\", SUBSYSTEMS==\"usb\", IMPORT{program}=\"ata_id --export $devnode\"\n\n# Fall back usb_id for USB devices\nKERNEL==\"sd*[!0-9]|sr*\", ENV{ID_SERIAL}!=\"?*\", SUBSYSTEMS==\"usb\", IMPORT{builtin}=\"usb_id\"\n\n# SCSI devices\nKERNEL==\"sd*[!0-9]|sr*\", ENV{ID_SERIAL}!=\"?*\", IMPORT{program}=\"scsi_id --export --whitelisted -d $devnode\", ENV{ID_BUS}=\"scsi\"\nKERNEL==\"cciss*\", ENV{DEVTYPE}==\"disk\", ENV{ID_SERIAL}!=\"?*\", IMPORT{program}=\"scsi_id --export --whitelisted -d $devnode\", ENV{ID_BUS}=\"cciss\"\nKERNEL==\"sd*|sr*|cciss*\", ENV{DEVTYPE}==\"disk\", ENV{ID_SERIAL}==\"?*\", SYMLINK+=\"disk/by-id/$env{ID_BUS}-$env{ID_SERIAL}\"\nKERNEL==\"sd*|cciss*\", ENV{DEVTYPE}==\"partition\", ENV{ID_SERIAL}==\"?*\", SYMLINK+=\"disk/by-id/$env{ID_BUS}-$env{ID_SERIAL}-part%n\"\n\n# MMC\nKERNEL==\"mmcblk[0-9]\", SUBSYSTEMS==\"mmc\", ATTRS{serial}==\"?*\", ENV{ID_SERIAL}=\"$attr{serial}\"\nKERNEL==\"mmcblk[0-9]\", SUBSYSTEMS==\"mmc\", ATTRS{name}==\"?*\", ENV{ID_NAME}=\"$attr{name}\"\nKERNEL==\"mmcblk[0-9]\", ENV{ID_NAME}==\"?*\", ENV{ID_SERIAL}==\"?*\", SYMLINK+=\"disk/by-id/mmc-$env{ID_NAME}_$env{ID_SERIAL}\"\nKERNEL==\"mmcblk[0-9]p[0-9]*\", ENV{ID_NAME}==\"?*\", ENV{ID_SERIAL}==\"?*\", SYMLINK+=\"disk/by-id/mmc-$env{ID_NAME}_$env{ID_SERIAL}-part%n\"\n\n# by-path\nENV{DEVTYPE}==\"disk\", DEVPATH!=\"*/virtual/*\", IMPORT{builtin}=\"path_id\"\nKERNEL==\"mmcblk[0-9]boot[0-9]\", ENV{DEVTYPE}==\"disk\", ENV{ID_PATH}==\"?*\", SYMLINK+=\"disk/by-path/$env{ID_PATH}-boot%n\"\nKERNEL!=\"mmcblk[0-9]boot[0-9]\", ENV{DEVTYPE}==\"disk\", ENV{ID_PATH}==\"?*\", SYMLINK+=\"disk/by-path/$env{ID_PATH}\"\nENV{DEVTYPE}==\"partition\", ENV{ID_PATH}==\"?*\", SYMLINK+=\"disk/by-path/$env{ID_PATH}-part%n\"\n# compatible links for ATA devices\nKERNEL!=\"mmcblk[0-9]boot[0-9]\", ENV{DEVTYPE}==\"disk\", ENV{ID_PATH_ATA_COMPAT}==\"?*\", SYMLINK+=\"disk/by-path/$env{ID_PATH_ATA_COMPAT}\"\nENV{DEVTYPE}==\"partition\", ENV{ID_PATH_ATA_COMPAT}==\"?*\", SYMLINK+=\"disk/by-path/$env{ID_PATH_ATA_COMPAT}-part%n\"\n\n# probe filesystem metadata of disks\nKERNEL!=\"sr*|mmcblk[0-9]boot[0-9]\", IMPORT{builtin}=\"blkid\"\n\n# by-label/by-uuid links (filesystem metadata)\nENV{ID_FS_USAGE}==\"filesystem|other|crypto\", ENV{ID_FS_UUID_ENC}==\"?*\", SYMLINK+=\"disk/by-uuid/$env{ID_FS_UUID_ENC}\"\nENV{ID_FS_USAGE}==\"filesystem|other|crypto\", ENV{ID_FS_LABEL_ENC}==\"?*\", SYMLINK+=\"disk/by-label/$env{ID_FS_LABEL_ENC}\"\n\n# by-id (World Wide Name)\nENV{DEVTYPE}==\"disk\", ENV{ID_WWN_WITH_EXTENSION}==\"?*\", SYMLINK+=\"disk/by-id/wwn-$env{ID_WWN_WITH_EXTENSION}\"\nENV{DEVTYPE}==\"partition\", ENV{ID_WWN_WITH_EXTENSION}==\"?*\", SYMLINK+=\"disk/by-id/wwn-$env{ID_WWN_WITH_EXTENSION}-part%n\"\n\n# by-partlabel/by-partuuid links (partition metadata)\nENV{ID_PART_ENTRY_UUID}==\"?*\", SYMLINK+=\"disk/by-partuuid/$env{ID_PART_ENTRY_UUID}\"\nENV{ID_PART_ENTRY_SCHEME}==\"gpt\", ENV{ID_PART_ENTRY_NAME}==\"?*\", SYMLINK+=\"disk/by-partlabel/$env{ID_PART_ENTRY_NAME}\"\n\n# by-diskseq link (if an app is told to open a path like this, they may parse\n# the diskseq number from the path, then issue BLKGETDISKSEQ to verify they really got\n# the right device, to access specific disks in a race-free fashion)\nENV{DISKSEQ}==\"?*\", ENV{DEVTYPE}!=\"partition\", SYMLINK+=\"disk/by-diskseq/$env{DISKSEQ}\"\n\nLABEL=\"persistent_storage_end\"\n`);copyBtnbtn_6fe449e6179c447bb82aa2bb7c52ea72.innerHTML = res ? '&#10003;' : 'error';setTimeout(() => { copyBtnbtn_6fe449e6179c447bb82aa2bb7c52ea72.innerHTML = '&#10697;'}, 3000);
+});
+</script>
+</div><div class="org-src-container">
+<pre class="src src-bash"><span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"># </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">persistent storage links: /dev/disk/{by-id,by-uuid,by-label,by-path}
+</span>
+<span style="color: var(--clr-variable); background-color: var(--bg-variable);">ACTION</span>==<span style="color: var(--clr-string); background-color: var(--bg-string);">"remove"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">GOTO</span>=<span style="color: var(--clr-string); background-color: var(--bg-string);">"persistent_storage_end"</span>
+ENV{UDEV_DISABLE_PERSISTENT_STORAGE_RULES_FLAG}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"1"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">GOTO</span>=<span style="color: var(--clr-string); background-color: var(--bg-string);">"persistent_storage_end"</span>
+
+SUBSYSTEM!=<span style="color: var(--clr-string); background-color: var(--bg-string);">"block|ubi"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">GOTO</span>=<span style="color: var(--clr-string); background-color: var(--bg-string);">"persistent_storage_end"</span>
+KERNEL!=<span style="color: var(--clr-string); background-color: var(--bg-string);">"loop*|mmcblk*[0-9]|msblk*[0-9]|mspblk*[0-9]|nvme*|sd*|sr*|vd*|xvd*|bcache*|cciss*|dasd*|ubd*|ubi*|scm*|pmem*|nbd*|zd*"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">GOTO</span>=<span style="color: var(--clr-string); background-color: var(--bg-string);">"persistent_storage_end"</span>
+
+<span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"># </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">ignore partitions that span the entire disk
+</span><span style="color: var(--clr-variable); background-color: var(--bg-variable);">TEST</span>==<span style="color: var(--clr-string); background-color: var(--bg-string);">"whole_disk"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">GOTO</span>=<span style="color: var(--clr-string); background-color: var(--bg-string);">"persistent_storage_end"</span>
+
+ENV{DEVTYPE}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"partition"</span>, <span style="color: #8b2252;">\</span>
+  IMPORT{parent}=<span style="color: var(--clr-string); background-color: var(--bg-string);">"ID_[!F]*"</span>, IMPORT{parent}=<span style="color: var(--clr-string); background-color: var(--bg-string);">"ID_"</span>, <span style="color: #8b2252;">\</span>
+  IMPORT{parent}=<span style="color: var(--clr-string); background-color: var(--bg-string);">"ID_F[!S]*"</span>, IMPORT{parent}=<span style="color: var(--clr-string); background-color: var(--bg-string);">"ID_F"</span>, <span style="color: #8b2252;">\</span>
+  IMPORT{parent}=<span style="color: var(--clr-string); background-color: var(--bg-string);">"ID_FS[!_]*"</span>, IMPORT{parent}=<span style="color: var(--clr-string); background-color: var(--bg-string);">"ID_FS"</span>
+
+<span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"># </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">Run ata_id on non-removable USB Mass Storage (SATA/PATA disks in enclosures)
+</span><span style="color: var(--clr-variable); background-color: var(--bg-variable);">KERNEL</span>==<span style="color: var(--clr-string); background-color: var(--bg-string);">"sd*[!0-9]|sr*"</span>, ENV{ID_SERIAL}!=<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, ATTR{removable}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"0"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SUBSYSTEMS</span>==<span style="color: var(--clr-string); background-color: var(--bg-string);">"usb"</span>, IMPORT{program}=<span style="color: var(--clr-string); background-color: var(--bg-string);">"ata_id --export $devnode"</span>
+
+<span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"># </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">Fall back usb_id for USB devices
+</span><span style="color: var(--clr-variable); background-color: var(--bg-variable);">KERNEL</span>==<span style="color: var(--clr-string); background-color: var(--bg-string);">"sd*[!0-9]|sr*"</span>, ENV{ID_SERIAL}!=<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SUBSYSTEMS</span>==<span style="color: var(--clr-string); background-color: var(--bg-string);">"usb"</span>, IMPORT{<span style="color: var(--clr-builtin); background-color: var(--bg-builtin);">builtin</span>}=<span style="color: var(--clr-string); background-color: var(--bg-string);">"usb_id"</span>
+
+<span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"># </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">SCSI devices
+</span><span style="color: var(--clr-variable); background-color: var(--bg-variable);">KERNEL</span>==<span style="color: var(--clr-string); background-color: var(--bg-string);">"sd*[!0-9]|sr*"</span>, ENV{ID_SERIAL}!=<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, IMPORT{program}=<span style="color: var(--clr-string); background-color: var(--bg-string);">"scsi_id --export --whitelisted -d $devnode"</span>, ENV{ID_BUS}=<span style="color: var(--clr-string); background-color: var(--bg-string);">"scsi"</span>
+<span style="color: var(--clr-variable); background-color: var(--bg-variable);">KERNEL</span>==<span style="color: var(--clr-string); background-color: var(--bg-string);">"cciss*"</span>, ENV{DEVTYPE}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk"</span>, ENV{ID_SERIAL}!=<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, IMPORT{program}=<span style="color: var(--clr-string); background-color: var(--bg-string);">"scsi_id --export --whitelisted -d $devnode"</span>, ENV{ID_BUS}=<span style="color: var(--clr-string); background-color: var(--bg-string);">"cciss"</span>
+<span style="color: var(--clr-variable); background-color: var(--bg-variable);">KERNEL</span>==<span style="color: var(--clr-string); background-color: var(--bg-string);">"sd*|sr*|cciss*"</span>, ENV{DEVTYPE}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk"</span>, ENV{ID_SERIAL}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SYMLINK</span>+=<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk/by-id/$env{ID_BUS}-$env{ID_SERIAL}"</span>
+<span style="color: var(--clr-variable); background-color: var(--bg-variable);">KERNEL</span>==<span style="color: var(--clr-string); background-color: var(--bg-string);">"sd*|cciss*"</span>, ENV{DEVTYPE}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"partition"</span>, ENV{ID_SERIAL}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SYMLINK</span>+=<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk/by-id/$env{ID_BUS}-$env{ID_SERIAL}-part%n"</span>
+
+<span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"># </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">MMC
+</span><span style="color: var(--clr-variable); background-color: var(--bg-variable);">KERNEL</span>==<span style="color: var(--clr-string); background-color: var(--bg-string);">"mmcblk[0-9]"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SUBSYSTEMS</span>==<span style="color: var(--clr-string); background-color: var(--bg-string);">"mmc"</span>, ATTRS{serial}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, ENV{ID_SERIAL}=<span style="color: var(--clr-string); background-color: var(--bg-string);">"$attr{serial}"</span>
+<span style="color: var(--clr-variable); background-color: var(--bg-variable);">KERNEL</span>==<span style="color: var(--clr-string); background-color: var(--bg-string);">"mmcblk[0-9]"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SUBSYSTEMS</span>==<span style="color: var(--clr-string); background-color: var(--bg-string);">"mmc"</span>, ATTRS{name}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, ENV{ID_NAME}=<span style="color: var(--clr-string); background-color: var(--bg-string);">"$attr{name}"</span>
+<span style="color: var(--clr-variable); background-color: var(--bg-variable);">KERNEL</span>==<span style="color: var(--clr-string); background-color: var(--bg-string);">"mmcblk[0-9]"</span>, ENV{ID_NAME}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, ENV{ID_SERIAL}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SYMLINK</span>+=<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk/by-id/mmc-$env{ID_NAME}_$env{ID_SERIAL}"</span>
+<span style="color: var(--clr-variable); background-color: var(--bg-variable);">KERNEL</span>==<span style="color: var(--clr-string); background-color: var(--bg-string);">"mmcblk[0-9]p[0-9]*"</span>, ENV{ID_NAME}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, ENV{ID_SERIAL}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SYMLINK</span>+=<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk/by-id/mmc-$env{ID_NAME}_$env{ID_SERIAL}-part%n"</span>
+
+<span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"># </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">by-path
+</span>ENV{DEVTYPE}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk"</span>, DEVPATH!=<span style="color: var(--clr-string); background-color: var(--bg-string);">"*/virtual/*"</span>, IMPORT{<span style="color: var(--clr-builtin); background-color: var(--bg-builtin);">builtin</span>}=<span style="color: var(--clr-string); background-color: var(--bg-string);">"path_id"</span>
+<span style="color: var(--clr-variable); background-color: var(--bg-variable);">KERNEL</span>==<span style="color: var(--clr-string); background-color: var(--bg-string);">"mmcblk[0-9]boot[0-9]"</span>, ENV{DEVTYPE}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk"</span>, ENV{ID_PATH}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SYMLINK</span>+=<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk/by-path/$env{ID_PATH}-boot%n"</span>
+KERNEL!=<span style="color: var(--clr-string); background-color: var(--bg-string);">"mmcblk[0-9]boot[0-9]"</span>, ENV{DEVTYPE}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk"</span>, ENV{ID_PATH}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SYMLINK</span>+=<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk/by-path/$env{ID_PATH}"</span>
+ENV{DEVTYPE}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"partition"</span>, ENV{ID_PATH}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SYMLINK</span>+=<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk/by-path/$env{ID_PATH}-part%n"</span>
+<span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"># </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">compatible links for ATA devices
+</span>KERNEL!=<span style="color: var(--clr-string); background-color: var(--bg-string);">"mmcblk[0-9]boot[0-9]"</span>, ENV{DEVTYPE}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk"</span>, ENV{ID_PATH_ATA_COMPAT}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SYMLINK</span>+=<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk/by-path/$env{ID_PATH_ATA_COMPAT}"</span>
+ENV{DEVTYPE}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"partition"</span>, ENV{ID_PATH_ATA_COMPAT}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SYMLINK</span>+=<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk/by-path/$env{ID_PATH_ATA_COMPAT}-part%n"</span>
+
+<span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"># </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">probe filesystem metadata of disks
+</span>KERNEL!=<span style="color: var(--clr-string); background-color: var(--bg-string);">"sr*|mmcblk[0-9]boot[0-9]"</span>, IMPORT{<span style="color: var(--clr-builtin); background-color: var(--bg-builtin);">builtin</span>}=<span style="color: var(--clr-string); background-color: var(--bg-string);">"blkid"</span>
+
+<span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"># </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">by-label/by-uuid links (filesystem metadata)
+</span>ENV{ID_FS_USAGE}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"filesystem|other|crypto"</span>, ENV{ID_FS_UUID_ENC}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SYMLINK</span>+=<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk/by-uuid/$env{ID_FS_UUID_ENC}"</span>
+ENV{ID_FS_USAGE}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"filesystem|other|crypto"</span>, ENV{ID_FS_LABEL_ENC}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SYMLINK</span>+=<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk/by-label/$env{ID_FS_LABEL_ENC}"</span>
+
+<span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"># </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">by-id (World Wide Name)
+</span>ENV{DEVTYPE}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk"</span>, ENV{ID_WWN_WITH_EXTENSION}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SYMLINK</span>+=<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk/by-id/wwn-$env{ID_WWN_WITH_EXTENSION}"</span>
+ENV{DEVTYPE}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"partition"</span>, ENV{ID_WWN_WITH_EXTENSION}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SYMLINK</span>+=<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk/by-id/wwn-$env{ID_WWN_WITH_EXTENSION}-part%n"</span>
+
+<span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"># </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">by-partlabel/by-partuuid links (partition metadata)
+</span>ENV{ID_PART_ENTRY_UUID}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SYMLINK</span>+=<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk/by-partuuid/$env{ID_PART_ENTRY_UUID}"</span>
+ENV{ID_PART_ENTRY_SCHEME}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"gpt"</span>, ENV{ID_PART_ENTRY_NAME}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SYMLINK</span>+=<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk/by-partlabel/$env{ID_PART_ENTRY_NAME}"</span>
+
+<span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"># </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">by-diskseq link (if an app is told to open a path like this, they may parse
+</span><span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"># </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">the diskseq number from the path, then issue BLKGETDISKSEQ to verify they really got
+</span><span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"># </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">the right device, to access specific disks in a race-free fashion)
+</span>ENV{DISKSEQ}==<span style="color: var(--clr-string); background-color: var(--bg-string);">"?*"</span>, ENV{DEVTYPE}!=<span style="color: var(--clr-string); background-color: var(--bg-string);">"partition"</span>, <span style="color: var(--clr-variable); background-color: var(--bg-variable);">SYMLINK</span>+=<span style="color: var(--clr-string); background-color: var(--bg-string);">"disk/by-diskseq/$env{DISKSEQ}"</span>
+
+<span style="color: var(--clr-variable); background-color: var(--bg-variable);">LABEL</span>=<span style="color: var(--clr-string); background-color: var(--bg-string);">"persistent_storage_end"</span>
+</pre>
+</div></div>
+</div>
+</div>
+</div>
+<div id="outline-container-org733538a" class="outline-2">
+<h2 id="org733538a"><span class="section-number-2">4.</span> 实现原理</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-org4704535" class="outline-3">
+<h3 id="org4704535"><span class="section-number-3">4.1.</span> udevadm (udev ctrl)</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+使用本地 socket 通信，udevadm 相关工具与 udevd 守护进程通信
+</p>
+<div class='org-src-wrapper'>
+<div class='org-src-bar'><span class='srcLangLabel'>C</span><button class='copyBtn' name=btn_2384ccfc32f94e429c00a27e98284091>&#10697;</button>
+<script type='text/javascript'>
+var copyBtnbtn_2384ccfc32f94e429c00a27e98284091=document.querySelector('button[name=btn_2384ccfc32f94e429c00a27e98284091]');
+copyBtnbtn_2384ccfc32f94e429c00a27e98284091.addEventListener('click', function(event) {
+let res = copyTextToClipboard(`socket(AF_LOCAL, SOCK_SEQPACKET|SOCK_NONBLOCK|SOCK_CLOEXEC, 0);\n`);copyBtnbtn_2384ccfc32f94e429c00a27e98284091.innerHTML = res ? '&#10003;' : 'error';setTimeout(() => { copyBtnbtn_2384ccfc32f94e429c00a27e98284091.innerHTML = '&#10697;'}, 3000);
+});
+</script>
+</div><div class="org-src-container">
+<pre class="src src-c"><span style="color: var(--function-clr-name); background-color: var(--function-bg-name);">socket</span>(<span style="color: #228b22;">AF_LOCAL</span>, SOCK_SEQPACKET|SOCK_NONBLOCK|SOCK_CLOEXEC, 0);
+</pre>
+</div></div>
+</div>
+</div>
+<div id="outline-container-org100bb72" class="outline-3">
+<h3 id="org100bb72"><span class="section-number-3">4.2.</span> netlink (udev monitor)</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+使用 netlink socket 通信，内核与主线程通信
+</p>
+<div class='org-src-wrapper'>
+<div class='org-src-bar'><span class='srcLangLabel'>C</span><button class='copyBtn' name=btn_da38ff3d257c4ea9949e89a8280faab6>&#10697;</button>
+<script type='text/javascript'>
+var copyBtnbtn_da38ff3d257c4ea9949e89a8280faab6=document.querySelector('button[name=btn_da38ff3d257c4ea9949e89a8280faab6]');
+copyBtnbtn_da38ff3d257c4ea9949e89a8280faab6.addEventListener('click', function(event) {
+let res = copyTextToClipboard(`socket(PF_NETLINK, SOCK_RAW|SOCK_CLOEXEC|SOCK_NONBLOCK, NETLINK_KOBJECT_UEVENT);\n`);copyBtnbtn_da38ff3d257c4ea9949e89a8280faab6.innerHTML = res ? '&#10003;' : 'error';setTimeout(() => { copyBtnbtn_da38ff3d257c4ea9949e89a8280faab6.innerHTML = '&#10697;'}, 3000);
+});
+</script>
+</div><div class="org-src-container">
+<pre class="src src-c"><span style="color: var(--function-clr-name); background-color: var(--function-bg-name);">socket</span>(<span style="color: #228b22;">PF_NETLINK</span>, SOCK_RAW|SOCK_CLOEXEC|SOCK_NONBLOCK, <span style="color: #228b22;">NETLINK_KOBJECT_UEVENT</span>);
+</pre>
+</div></div>
+</div>
+</div>
+<div id="outline-container-org316e32e" class="outline-3">
+<h3 id="org316e32e"><span class="section-number-3">4.3.</span> inotify (udev watch)</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+使用 inotify 通信，监控规则文件变化和指定设备的变化
+</p>
+<div class='org-src-wrapper'>
+<div class='org-src-bar'><span class='srcLangLabel'>C</span><button class='copyBtn' name=btn_fd70293668b14e2399614d9ec1b6414b>&#10697;</button>
+<script type='text/javascript'>
+var copyBtnbtn_fd70293668b14e2399614d9ec1b6414b=document.querySelector('button[name=btn_fd70293668b14e2399614d9ec1b6414b]');
+copyBtnbtn_fd70293668b14e2399614d9ec1b6414b.addEventListener('click', function(event) {
+let res = copyTextToClipboard(`inotify_init1(IN_CLOEXEC);\n/* watch rules.d paths for changes */\ninotify_add_watch(fd_inotify, UDEV_RULES_DIR, IN_DELETE | IN_MOVE | IN_CLOSE_WRITE);\ninotify_add_watch(fd_inotify, UDEV_CONF_DIR \"/rules.d\", IN_DELETE | IN_MOVE | IN_CLOSE_WRITE);\ninotify_add_watch(fd_inotify, UDEV_ROOT_RUN \"/udev/rules.d\", IN_DELETE | IN_MOVE | IN_CLOSE_WRITE);\n/* watch dev */\ninotify_add_watch(inotify_fd, udev_device_get_devnode(dev), IN_CLOSE_WRITE);\n`);copyBtnbtn_fd70293668b14e2399614d9ec1b6414b.innerHTML = res ? '&#10003;' : 'error';setTimeout(() => { copyBtnbtn_fd70293668b14e2399614d9ec1b6414b.innerHTML = '&#10697;'}, 3000);
+});
+</script>
+</div><div class="org-src-container">
+<pre class="src src-c"><span style="color: var(--function-clr-name); background-color: var(--function-bg-name);">inotify_init1</span>(<span style="color: #228b22;">IN_CLOEXEC</span>);
+<span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);">/* </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">watch rules.d paths for changes</span><span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"> */</span>
+<span style="color: var(--function-clr-name); background-color: var(--function-bg-name);">inotify_add_watch</span>(<span style="color: #228b22;">fd_inotify</span>, <span style="color: #228b22;">UDEV_RULES_DIR</span>, IN_DELETE | IN_MOVE | IN_CLOSE_WRITE);
+<span style="color: var(--function-clr-name); background-color: var(--function-bg-name);">inotify_add_watch</span>(<span style="color: #228b22;">fd_inotify</span>, UDEV_CONF_DIR <span style="color: var(--clr-string); background-color: var(--bg-string);">"/rules.d"</span>, IN_DELETE | IN_MOVE | IN_CLOSE_WRITE);
+<span style="color: var(--function-clr-name); background-color: var(--function-bg-name);">inotify_add_watch</span>(<span style="color: #228b22;">fd_inotify</span>, UDEV_ROOT_RUN <span style="color: var(--clr-string); background-color: var(--bg-string);">"/udev/rules.d"</span>, IN_DELETE | IN_MOVE | IN_CLOSE_WRITE);
+<span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);">/* </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">watch dev</span><span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"> */</span>
+<span style="color: var(--function-clr-name); background-color: var(--function-bg-name);">inotify_add_watch</span>(<span style="color: #228b22;">inotify_fd</span>, <span style="color: #228b22;">udev_device_get_devnode</span>(<span style="color: var(--clr-variable); background-color: var(--bg-variable);">dev</span>), <span style="color: #228b22;">IN_CLOSE_WRITE</span>);
+</pre>
+</div></div>
+</div>
+</div>
+<div id="outline-container-orgf0d479d" class="outline-3">
+<h3 id="orgf0d479d"><span class="section-number-3">4.4.</span> signal</h3>
+<div class="outline-text-3" id="text-4-4">
+<p>
+使用 signal 通信，用于控制工作线程
+</p>
+<div class='org-src-wrapper'>
+<div class='org-src-bar'><span class='srcLangLabel'>C</span><button class='copyBtn' name=btn_0d9e49497f4a45428bf2e906ecc0ba6d>&#10697;</button>
+<script type='text/javascript'>
+var copyBtnbtn_0d9e49497f4a45428bf2e906ecc0ba6d=document.querySelector('button[name=btn_0d9e49497f4a45428bf2e906ecc0ba6d]');
+copyBtnbtn_0d9e49497f4a45428bf2e906ecc0ba6d.addEventListener('click', function(event) {
+let res = copyTextToClipboard(`/* block and listen to all signals on signalfd */\nsigfillset(&mask);\nsigprocmask(SIG_SETMASK, &mask, &sigmask_orig);\nfd_signal = signalfd(-1, &mask, SFD_NONBLOCK|SFD_CLOEXEC);\n`);copyBtnbtn_0d9e49497f4a45428bf2e906ecc0ba6d.innerHTML = res ? '&#10003;' : 'error';setTimeout(() => { copyBtnbtn_0d9e49497f4a45428bf2e906ecc0ba6d.innerHTML = '&#10697;'}, 3000);
+});
+</script>
+</div><div class="org-src-container">
+<pre class="src src-c"><span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);">/* </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">block and listen to all signals on signalfd</span><span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"> */</span>
+sigfillset(&amp;mask);
+<span style="color: var(--function-clr-name); background-color: var(--function-bg-name);">sigprocmask</span>(<span style="color: #228b22;">SIG_SETMASK</span>, &amp;mask, &amp;sigmask_orig);
+fd_signal = signalfd(-1, &amp;mask, SFD_NONBLOCK|SFD_CLOEXEC);
+</pre>
+</div></div>
+</div>
+</div>
+<div id="outline-container-orgc01b26e" class="outline-3">
+<h3 id="orgc01b26e"><span class="section-number-3">4.5.</span> worker watch</h3>
+<div class="outline-text-3" id="text-4-5">
+<p>
+使用 uname socket 通信, 用于每个工作线程与主线程之间通信
+</p>
+<div class='org-src-wrapper'>
+<div class='org-src-bar'><span class='srcLangLabel'>C</span><button class='copyBtn' name=btn_31bc0812972e4df68a77d57ce2c521cf>&#10697;</button>
+<script type='text/javascript'>
+var copyBtnbtn_31bc0812972e4df68a77d57ce2c521cf=document.querySelector('button[name=btn_31bc0812972e4df68a77d57ce2c521cf]');
+copyBtnbtn_31bc0812972e4df68a77d57ce2c521cf.addEventListener('click', function(event) {
+let res = copyTextToClipboard(`/* unnamed socket from workers to the main daemon */\nsocketpair(AF_LOCAL, SOCK_DGRAM|SOCK_CLOEXEC, 0, worker_watch);\nfd_worker = worker_watch[READ_END];\nsetsockopt(fd_worker, SOL_SOCKET, SO_PASSCRED, &one, sizeof(one));\n`);copyBtnbtn_31bc0812972e4df68a77d57ce2c521cf.innerHTML = res ? '&#10003;' : 'error';setTimeout(() => { copyBtnbtn_31bc0812972e4df68a77d57ce2c521cf.innerHTML = '&#10697;'}, 3000);
+});
+</script>
+</div><div class="org-src-container">
+<pre class="src src-c"><span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);">/* </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">unnamed socket from workers to the main daemon</span><span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"> */</span>
+<span style="color: var(--function-clr-name); background-color: var(--function-bg-name);">socketpair</span>(<span style="color: #228b22;">AF_LOCAL</span>, SOCK_DGRAM|SOCK_CLOEXEC, 0, <span style="color: #228b22;">worker_watch</span>);
+fd_worker = worker_watch[READ_END];
+<span style="color: var(--function-clr-name); background-color: var(--function-bg-name);">setsockopt</span>(<span style="color: #228b22;">fd_worker</span>, <span style="color: #228b22;">SOL_SOCKET</span>, <span style="color: #228b22;">SO_PASSCRED</span>, &amp;one, <span style="color: var(--clr-keyword); background-color: var(--bg-keyword);">sizeof</span>(<span style="color: #228b22;">one</span>));
+</pre>
+</div></div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgefb9339" class="outline-2">
+<h2 id="orgefb9339"><span class="section-number-2">5.</span> 常用命令</h2>
+<div class="outline-text-2" id="text-5">
+<div class='org-src-wrapper'>
+<div class='org-src-bar'><span class='srcLangLabel'>SH</span><button class='copyBtn' name=btn_0362d0b5a82a45289c19d638c044b8b1>&#10697;</button>
+<script type='text/javascript'>
+var copyBtnbtn_0362d0b5a82a45289c19d638c044b8b1=document.querySelector('button[name=btn_0362d0b5a82a45289c19d638c044b8b1]');
+copyBtnbtn_0362d0b5a82a45289c19d638c044b8b1.addEventListener('click', function(event) {
+let res = copyTextToClipboard(`udevadm control --reload # 重新加载规则\nudevadm control --log_priority=<level number> # 更改守护进程的日志等级\nudevadm monitor # 直观显示驱动程序核心事件以及 udev 事件进程的时间\nudevadm monitor --env # 显示完整的事件环境\n`);copyBtnbtn_0362d0b5a82a45289c19d638c044b8b1.innerHTML = res ? '&#10003;' : 'error';setTimeout(() => { copyBtnbtn_0362d0b5a82a45289c19d638c044b8b1.innerHTML = '&#10697;'}, 3000);
+});
+</script>
+</div><div class="org-src-container">
+<pre class="src src-sh">udevadm control --reload <span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"># </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">&#37325;&#26032;&#21152;&#36733;&#35268;&#21017;
+</span>udevadm control --log_priority=&lt;level number&gt; <span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"># </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">&#26356;&#25913;&#23432;&#25252;&#36827;&#31243;&#30340;&#26085;&#24535;&#31561;&#32423;
+</span>udevadm monitor <span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"># </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">&#30452;&#35266;&#26174;&#31034;&#39537;&#21160;&#31243;&#24207;&#26680;&#24515;&#20107;&#20214;&#20197;&#21450; udev &#20107;&#20214;&#36827;&#31243;&#30340;&#26102;&#38388;
+</span>udevadm monitor --env <span style="color: var(--clr-comment-delimiter); background-color: var(--bg-comment-delimiter);"># </span><span style="color: var(--clr-comment); background-color: var(--bg-comment);">&#26174;&#31034;&#23436;&#25972;&#30340;&#20107;&#20214;&#29615;&#22659;</span>
+</pre>
+</div></div>
+</div>
+</div>
+<div id="outline-container-org4e7a9cc" class="outline-2">
+<h2 id="org4e7a9cc"><span class="section-number-2">6.</span> 参考链接</h2>
+<div class="outline-text-2" id="text-6">
+<ol class="org-ol">
+<li><a href="https://www.jinbuguo.com/systemd/udev.html">udev 中文手册[金步国]​</a></li>
+</ol>
+
+
+<ol class="org-ol">
+<li><a href="https://docs.opencloudos.org/OCS/AdministratorGuide/System_Service_Management/Udev_guide/">udev 机制与使用</a></li>
+</ol>
+
+
+<ol class="org-ol">
+<li><a href="https://documentation.suse.com/zh-cn/sles/15-SP6/html/SLES-all/cha-udev.html">使用 udev 进行动态内核设备管理</a></li>
+</ol>
+
+
+<ol class="org-ol">
+<li><a href="https://just4coding.com/2022/11/30/udev/">udev机制简介</a></li>
+</ol>
+
+
+<ol class="org-ol">
+<li><a href="https://man.archlinux.org/man/udev.7">udev - Dynamic device management</a></li>
+</ol>
+
+
+<ol class="org-ol">
+<li><a href="https://www.reactivated.net/writing_udev_rules.html#syntax">Writing udev rules</a></li>
+</ol>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+if (!document.cookie.split('; ').find(r => r.startsWith('mode'))) {
+document.cookie = 'mode=query'
+}
+document.cookie = 'light=tsdh-light'
+document.cookie = 'dark=tsdh-dark'
+/*
+;; nice-org-html.js
+;;==============================================================================
+;; Copyright (C) 2024, Ewan Townshend
+
+;; Author: Ewan Townshend
+;; URL: https://github.com/ewantown/nice-org-html
+;; Version: 1.2
+
+;;==============================================================================
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+;; This file is not part of emacs.
+
+;;==============================================================================
+;; JS for html exported by et-org-html.el
+ */
+
+const preamble = document.getElementById("preamble");
+const content = document.getElementById("content");
+const postamble = document.getElementById("postamble");
+
+const controls = document.getElementById("view-controls");
+const toggleTocBtn = document.getElementById("toggle-toc");
+const gotoTopBtn = document.getElementById("goto-top");
+const toggleModeBtn = document.getElementById("toggle-mode");
+const toc = document.getElementById("table-of-contents");
+
+// Get and parse options passed in cookie string
+const optCookie = document.cookie.split('; ').find(r => r.startsWith('options'));
+const options = {};
+if (optCookie) {
+  optCookie.split('=')[1].split('__').forEach(pair => {
+    const [key, val] = pair.split(':');
+    if (key && val) {
+      options[key] = val;
+    }
+  })
+}
+
+// Move sticky control bar (injected within preamble)
+document.body.insertBefore(controls, content);
+
+// Mode handling
+function getMode() {
+  let cookie = document.cookie.split('; ').find(r => r.startsWith('mode'))
+  return cookie && cookie.split("=")[1];
+}
+
+function setMode(mode) {
+  document.body.dataset.mode = mode;
+  let thmCookie = document.cookie.split('; ').find(r => r.startsWith(mode));
+  document.body.dataset.theme = thmCookie ? thmCookie.split('=')[1] : 'unknown';
+  toggleModeBtn.innerHTML = (mode === 'light') ? '&#9789;' : '&#9788;';
+  document.cookie = 'mode=' + mode;
+}
+
+// Initially, set mode based on stored cookie
+let mode = getMode();
+if (mode && ["light", "dark"].includes(mode)) {
+  setMode(mode);
+} else {  
+  let prop = "prefers-color-scheme";
+  let pref = (mode === "query") && window.matchMedia &&
+    ["light", "dark"].find(s => window.matchMedia(`(${prop}: ${s})`).matches);
+  setMode(pref || "dark"); // fallback: dark
+}
+
+// Mode toggling
+toggleModeBtn.addEventListener('click', () => {
+  setMode(document.body.dataset.mode === 'dark' ? 'light' : 'dark');
+})
+
+
+// Jump to top
+let scrollY = document.documentElement.scrollTop;
+window.addEventListener('scroll', () => {
+  let atTop = document.documentElement.scrollTop <= preamble.offsetHeight;
+  gotoTopBtn.dataset.show = !atTop + "";
+});
+gotoTopBtn.addEventListener('click', () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+})
+
+// Table-of-contents toggling
+if (toc) {
+  toggleTocBtn.dataset.show = 'true';
+  toggleTocBtn.addEventListener('click', () => {
+    let showingToc = document.body.dataset.toc;
+    scrollY = showingToc ? scrollY : document.documentElement.scrollTop;
+    if (showingToc) {
+      document.body.dataset.toc = '';
+      document.documentElement.scrollTop = scrollY;
+    } else {
+      let tocHeight =
+	Math.max(
+	  window.innerHeight - controls.offsetHeight,
+	  toc.offsetHeight
+	);
+      const header = document.getElementById("injected-header");
+      if (header && (scrollY > header.offsetHeight)) {
+	document.documentElement.scrollTop = preamble.offsetHeight;
+      }
+      toc.style.height = `${tocHeight}px`;
+      document.body.dataset.toc = 'true';
+    }
+    toc.addEventListener('click', () => {
+      if (document.body.dataset.toc) {
+	document.body.dataset.toc = '';
+	document.documentElement.scrollTop = scrollY;
+      }
+    })
+  })
+};
+
+// Instrument anchor linking for sticky control bar
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', (e) => {
+    e.preventDefault();
+    const targetId = e.currentTarget.getAttribute('href');
+    const target = document.querySelector(targetId);
+
+    setTimeout(() => {
+      const targetPos = target.getBoundingClientRect().top;
+      let offset = targetPos + document.documentElement.scrollTop;
+      offset -= controls.offsetHeight;
+      window.scrollTo({
+	top: offset,
+	behavior: "smooth"
+      });
+    }, 0);
+  });
+});
+
+function copyTextToClipboard(text) {
+  // Make invisible textarea
+  var textArea = document.createElement("textarea");
+  textArea.style.position = 'fixed';
+  textArea.style.top = 0;
+  textArea.style.left = 0;
+  textArea.style.width = '2em';
+  textArea.style.height = '2em';
+  textArea.style.padding = 0;
+  textArea.style.border = 'none';
+  textArea.style.outline = 'none';
+  textArea.style.boxShadow = 'none';
+  textArea.style.background = 'transparent';
+
+  // Copy contents into it
+  textArea.value = text;
+
+  // Try to copy from it to clipboard
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  var res;
+  try {
+    res = document.execCommand('copy');
+  } catch (err) {
+    res = false;
+  }
+
+  // Remove invisible textarea
+  document.body.removeChild(textArea);
+
+  return res;
+}
+
+// Handle the default header / footer drawers
+const header = document.getElementById("generated-header");
+const footer = document.getElementById("generated-footer");
+
+if (header) {
+  let toggle = header.querySelector("header nav input.nav-toggle");
+  if (toggle) { toggle.checked = false; }
+}
+if (footer) {
+  let nav = footer.querySelector("nav");
+  let toggle = nav && nav.querySelector(".nav-toggle");
+  let navList = nav && nav.querySelector(".nav-list");
+  let navElem = navList && [...navList.querySelectorAll(".nav-item")];
+  let numLink = navElem && navElem.length;
+  if (numLink) {
+    toggle.checked = false;
+    toggle.addEventListener('change', () => {
+      if (toggle.checked) {
+	setTimeout(() => window.scrollTo({
+	  behavior: 'smooth',
+	  top: document.body.scrollHeight	  
+	}), 88);
+      }
+   });
+  }
+}
+
+function autoCompact() {
+  var anchor, links, overlap, trivial;
+  const domCompute = (node) => {
+    if (node) {
+      anchor = node.querySelector('.nav-title, .nav-author');
+      links = node.querySelector('.nav-list');
+      overlap = links.offsetLeft - 5 <= anchor.offsetLeft + anchor.offsetWidth;	
+      trivial = links.offsetLeft === anchor.offsetLeft;
+    }
+  };
+  let mediaMatch = window.matchMedia('(max-width: 768px)').matches;
+  [header, footer].forEach(e => {
+    if (e) {
+      if (mediaMatch) {
+	e.classList.add('compact');
+      } else {
+	domCompute(e);
+	if (overlap && !trivial) {
+	  e.classList.add('compact');
+	} else {	
+	  let clone = e.cloneNode(true);
+	  clone.style.top = '-2000px';
+	  clone.style.maxHeight = '0px';
+	  clone.classList.remove('compact');
+	  e.parentNode.insertBefore(clone, e);
+	  domCompute(clone);
+	  let toggle = e.querySelector('.nav-toggle');
+	  if (!overlap && toggle && !toggle.checked) {
+	    e.classList.remove('compact');
+	  }
+	  e.parentNode.removeChild(clone);
+	}
+      }
+    }
+  })
+}
+
+if ((header || footer)) {
+  if (options.hasOwnProperty('layout')) {
+    [header, footer].forEach(e => e ? e.classList.add(options.layout) : null);
+  } else {
+    autoCompact();
+    window.addEventListener('resize', autoCompact);
+  }
+}
+
+if (options.hasOwnProperty('src-lang') && options['src-lang'] == 't') {
+  let labels = [...document.querySelectorAll('.srcLangLabel')];
+  labels.forEach(l => l.style.display = 'inline-block');
+}
+
+if (options.hasOwnProperty('collapsing') && options.collapsing == 't') {
+  let levels = [2, 3, 4, 5, 6];
+  let containerPrefix = 'outline-container-';
+  levels.forEach(l => {
+    let containers = [...document.querySelectorAll(`.outline-${l}`)];
+    containers.forEach(c => {
+      let id = c.id.slice(containerPrefix.length);
+      let headline = document.getElementById(id);
+      let siblings = [...c.children].filter(child => child.id != id);
+      headline.classList.add('collapsible');
+      headline.addEventListener('click', () => {	
+	if (headline.classList.contains('collapsed')) {
+	  headline.classList.remove('collapsed');
+	  siblings.forEach(child => {
+	    child.classList.remove('hidden');
+	  });	  
+	} else {
+	  headline.classList.add('collapsed');
+	  siblings.forEach(child => {
+	    child.classList.add('hidden');
+	  });
+	}
+      })
+    })
+  })
+}
+/*]]>*/-->
+</script><div hidden>Generated by: https://github.com/ewantown/nice-org-html</div>
+</div>
+</body>
+</html>
