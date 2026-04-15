@@ -11,3 +11,4 @@
 
 * [[file:rkgpu/rkgpu.org][RK3588 GPU 使用教程]]
 
+* [[file:lerobot/lerobot.org][Lerobot 教程]]
